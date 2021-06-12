@@ -1,9 +1,14 @@
+import 'package:driver/ui/common/theme.dart';
+import 'package:driver/ui/pages/home_page.dart';
+import 'package:driver/ui/pages/order_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:mitra/ui/common/styles.dart';
-import 'package:mitra/ui/pages/driver/home_page.dart';
-import 'package:mitra/ui/pages/driver/order_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
+  
   runApp(MyApp());
 }
 
@@ -11,33 +16,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Mitra Diiket',
+      title: 'Driver Diiket',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: ColorPallete.primaryColor,
-        accentColor: ColorPallete.secondaryColor,
-        textTheme: kTextTheme,
-        appBarTheme: AppBarTheme(
-            backgroundColor: ColorPallete.accentColor,
-            iconTheme: IconThemeData(
-              color: Colors.white,
-            )),
-        primaryTextTheme: kTextTheme,
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(
-              ColorPallete.primaryColor,
-            ), //button color
-            foregroundColor: MaterialStateProperty.all<Color>(
-              Colors.white,
-            ), //text (and icon)
-          ),
-        ),
-      ),
-      initialRoute: DriverHomePage.route,
+      theme: kAppTheme,
+      initialRoute: HomePage.route,
       routes: {
-        DriverHomePage.route: (_) => DriverHomePage(),
-        DriverOrderPage.route: (_) => DriverOrderPage(),
+        HomePage.route: (_) => HomePage(),
+        OrderPage.route: (_) => OrderPage(),
       },
     );
   }
