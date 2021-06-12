@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="id.innodev.diiket.mitra">
+    package="id.innodev.diiket.driver">
    <application
-        android:label="mitra"
+        android:label="driver"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

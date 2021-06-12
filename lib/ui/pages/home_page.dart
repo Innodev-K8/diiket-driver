@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mitra/ui/pages/driver/order_page.dart';
 
-class DriverHomePage extends StatelessWidget {
+import 'order_page.dart';
+
+class HomePage extends StatelessWidget {
   static String route = 'driver/home';
 
-  const DriverHomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class DriverHomePage extends StatelessWidget {
             Text('ini Driver Home Page'),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pushNamed(DriverOrderPage.route);
+                Navigator.of(context).pushNamed(OrderPage.route);
               },
               child: Text('Ke Order Page'),
             ),

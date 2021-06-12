@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class DriverDeliveringOrderPage extends StatelessWidget {
-  const DriverDeliveringOrderPage({Key? key}) : super(key: key);
+class DeliveringOrderPage extends StatelessWidget {
+  const DeliveringOrderPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
