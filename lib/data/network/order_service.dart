@@ -1,5 +1,11 @@
 import 'package:diiket_models/all.dart';
 import 'package:dio/dio.dart';
+import 'package:driver/data/network/api_service.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+final orderServiceProvider = Provider<OrderService>((ref) {
+  return OrderService(ref.read(apiProvider));
+});
 
 class OrderService {
   Dio _dio;
@@ -28,12 +34,16 @@ class OrderService {
     }
   }
 
-  Future<Order> getActiveOrder() async {
+  Future<Order?> getActiveOrder() async {
     try {
       final response = await _dio.get(_('active'));
 
       return Order.fromJson(response.data);
     } on DioError catch (error) {
+      if (error.response?.statusCode == 404) {
+        return null;
+      }
+
       throw CustomException.fromDioError(error);
     }
   }
