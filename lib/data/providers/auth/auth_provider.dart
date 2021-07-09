@@ -1,16 +1,13 @@
 import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart' as firebaseAuth;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:diiket_models/all.dart';
 import 'package:driver/data/network/auth_service.dart';
 import 'package:driver/data/providers/firebase_provider.dart';
-import 'package:driver/data/repositories/firebase_auth_repository.dart';
 
 import 'token_provider.dart';
 
 final authProvider = StateNotifierProvider<AuthState, User?>((ref) {
   return AuthState(
-    ref.read(firebaseAuthRepositoryProvider),
     ref.read(authServiceProvider),
     ref.read,
   );
@@ -19,45 +16,17 @@ final authProvider = StateNotifierProvider<AuthState, User?>((ref) {
 final authExceptionProvider = StateProvider<CustomException?>((_) => null);
 
 class AuthState extends StateNotifier<User?> {
-  FirebaseAuthRepository _firebaseAuthRepository;
   AuthService _authService;
   Reader _read;
 
-  StreamSubscription<FirebaseUser?>? _authStateChangesSubscription;
-
   AuthState(
-    this._firebaseAuthRepository,
     this._authService,
     this._read,
   ) : super(null) {
-    // _authStateChangesSubscription?.cancel();
-    // _authStateChangesSubscription = _firebaseAuthRepository.authStateChanges
-    //     .listen(onFirebaseAuthStateChanges);
-
     this.refreshProfile();
   }
 
-  void onFirebaseAuthStateChanges(FirebaseUser? user) async {
-    if (user != null) {
-      await _signInWithFirebaseUser(user);
-    } else {
-      await _signOutAll();
-    }
-  }
-
-  Future<void> signInWithPhoneCredential(
-      firebaseAuth.PhoneAuthCredential credential) async {
-    try {
-      await _firebaseAuthRepository.signInWithPhoneCredential(credential);
-    } on CustomException catch (error) {
-      _read(authExceptionProvider).state = error;
-    }
-  }
-
-  Future<void> signOut() async {
-    await _firebaseAuthRepository.signOut();
-  }
-
+  // Komunikasi ke laravel
   Future<void> updateUserName(String name) async {
     try {
       await _authService.updateProfile({
@@ -70,7 +39,6 @@ class AuthState extends StateNotifier<User?> {
     }
   }
 
-  // Komunikasi ke laravel
   Future<void> refreshProfile() async {
     try {
       state = await _authService.me();
@@ -91,37 +59,14 @@ class AuthState extends StateNotifier<User?> {
 
         state = response.user;
       } else {
-        await _signOutAll();
+        await signOut();
       }
     } on CustomException catch (error) {
       _read(authExceptionProvider).state = error;
     }
   }
 
-  Future<void> _signInWithFirebaseUser(FirebaseUser user) async {
-    try {
-      final String firebaseToken = await user.getIdToken();
-
-      final AuthResponse response =
-          await _authService.loginWithFirebaseToken(firebaseToken);
-
-      if (response.token != null && response.user != null) {
-        await _read(tokenProvider.notifier).setToken(response.token!);
-        await _read(crashlyticsProvider)
-            .setUserIdentifier(response.user!.firebase_uid ?? user.uid);
-
-        state = response.user;
-      } else {
-        await _signOutAll();
-      }
-    } on CustomException catch (error) {
-      _read(authExceptionProvider).state = error;
-
-      await _signOutAll();
-    }
-  }
-
-  Future<void> _signOutAll() async {
+  Future<void> signOut() async {
     try {
       if (_read(tokenProvider) != null) {
         await _authService.logout().onError((error, stackTrace) => null);
