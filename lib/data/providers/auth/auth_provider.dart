@@ -30,9 +30,11 @@ class AuthState extends StateNotifier<User?> {
     this._authService,
     this._read,
   ) : super(null) {
-    _authStateChangesSubscription?.cancel();
-    _authStateChangesSubscription = _firebaseAuthRepository.authStateChanges
-        .listen(onFirebaseAuthStateChanges);
+    // _authStateChangesSubscription?.cancel();
+    // _authStateChangesSubscription = _firebaseAuthRepository.authStateChanges
+    //     .listen(onFirebaseAuthStateChanges);
+
+    this.refreshProfile();
   }
 
   void onFirebaseAuthStateChanges(FirebaseUser? user) async {

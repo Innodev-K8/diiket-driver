@@ -37,6 +37,7 @@ class AuthService {
 
       return authResponse;
     } on DioError catch (error) {
+      print(error);
       throw CustomException.fromDioError(error);
     }
   }
