@@ -6,19 +6,30 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AuthWrapper extends HookWidget {
   final Widget Function(User)? auth;
-  final Widget guest;
+  final Widget Function()? guest;
+
+  final bool isAnimated;
 
   AuthWrapper({
     this.auth,
-    this.guest = const SizedBox.shrink(),
+    this.guest,
+    this.isAnimated = true,
   });
 
   Widget build(BuildContext context) {
     final User? user = useProvider(authProvider);
 
+    Widget child = user == null
+        ? (guest?.call() ?? SizedBox.shrink())
+        : (auth?.call(user) ?? SizedBox.shrink());
+
+    if (!isAnimated) {
+      return child;
+    }
+
     return AnimatedSwitcher(
       duration: Duration(milliseconds: 300),
-      child: user == null ? guest : (auth?.call(user) ?? SizedBox.shrink()),
+      child: child,
     );
   }
 }
