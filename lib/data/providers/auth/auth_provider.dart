@@ -77,6 +77,25 @@ class AuthState extends StateNotifier<User?> {
     }
   }
 
+  Future<void> signInWithEmailAndPassword(String email, String password) async {
+    try {
+      final AuthResponse response =
+          await _authService.loginWithEmailPassword(email, password);
+
+      if (response.token != null && response.user != null) {
+        await _read(tokenProvider.notifier).setToken(response.token!);
+        await _read(crashlyticsProvider)
+            .setUserIdentifier('${response.user!.id}#${response.user!.name}');
+
+        state = response.user;
+      } else {
+        await _signOutAll();
+      }
+    } on CustomException catch (error) {
+      _read(authExceptionProvider).state = error;
+    }
+  }
+
   Future<void> _signInWithFirebaseUser(FirebaseUser user) async {
     try {
       final String firebaseToken = await user.getIdToken();
@@ -85,16 +104,6 @@ class AuthState extends StateNotifier<User?> {
           await _authService.loginWithFirebaseToken(firebaseToken);
 
       if (response.token != null && response.user != null) {
-        if (response.user!.type != UserType.driver) {
-          // Jika login menggunakan nomor yang sudah terdaftar sebagai user
-          _read(authExceptionProvider).state = CustomException(
-            code: 403,
-            message: 'Akun Anda tidak memiliki izin untuk masuk',
-          );
-
-          await _signOutAll();
-        }
-
         await _read(tokenProvider.notifier).setToken(response.token!);
         await _read(crashlyticsProvider)
             .setUserIdentifier(response.user!.firebase_uid ?? user.uid);
