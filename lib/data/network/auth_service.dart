@@ -15,6 +15,32 @@ class AuthService {
 
   String _(Object path) => '/auth/$path';
 
+  Future<AuthResponse> loginWithEmailPassword(
+    String email,
+    String password,
+  ) async {
+    try {
+      final response = await _dio.post(
+        _('login'),
+        data: {
+          'email': email,
+          'password': password,
+          'device_name': 'mobile',
+        },
+      );
+
+      final authResponse = AuthResponse.fromJson(response.data);
+
+      if (authResponse.user?.type != UserType.driver) {
+        throw CustomException(code: 403, message: 'Kredensial salah');
+      }
+
+      return authResponse;
+    } on DioError catch (error) {
+      throw CustomException.fromDioError(error);
+    }
+  }
+
   Future<AuthResponse> loginWithFirebaseToken(String token) async {
     try {
       final response = await _dio.post(
@@ -25,7 +51,13 @@ class AuthService {
         },
       );
 
-      return AuthResponse.fromJson(response.data);
+      final authResponse = AuthResponse.fromJson(response.data);
+
+      if (authResponse.user?.type != UserType.driver) {
+        throw CustomException(code: 403, message: 'Kredensial salah');
+      }
+
+      return authResponse;
     } on DioError catch (error) {
       throw CustomException.fromDioError(error);
     }
