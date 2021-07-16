@@ -32,18 +32,18 @@ final kTextTheme = TextTheme(
     letterSpacing: -1.5,
   ),
   headline2: GoogleFonts.poppins(
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: FontWeight.w600,
     letterSpacing: 1,
   ),
   headline3: GoogleFonts.poppins(
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: FontWeight.w600,
     letterSpacing: 1,
   ),
   headline4: GoogleFonts.poppins(
     fontSize: 18,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.normal,
     letterSpacing: 1,
   ),
   headline5: GoogleFonts.poppins(

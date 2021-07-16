@@ -1,5 +1,8 @@
 import 'package:driver/data/providers/auth/auth_provider.dart';
 import 'package:driver/data/providers/order/available_orders_provider.dart';
+import 'package:driver/ui/common/styles.dart';
+import 'package:driver/ui/widgets/driver_detail_banner.dart';
+import 'package:driver/ui/widgets/order_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -14,7 +17,7 @@ class HomePage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final orderList = useProvider(availableOrdersProvider);
-
+final driver = useProvider(authProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text('Diiket Driver'),
@@ -32,29 +35,40 @@ class HomePage extends HookWidget {
       body: SizedBox(
         width: double.infinity,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('ini Driver Home Page'),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed(OrderPage.route);
-              },
-              child: Text('Ke Order Page'),
+            DriverDetailBanner(driver: driver!),
+            Divider(),
+
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Navigator.of(context).pushNamed(OrderPage.route);
+            //   },
+            //   child: Text('Ke Order Page'),
+            // ),
+            // SizedBox(height: 10),
+            // Text('Order yang dapat diambil: '),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 24),
+              child: Text(
+                "Daftar Pesanan",
+                style: kTextTheme.headline4,
+              ),
             ),
-            SizedBox(height: 10),
-            Text('Order yang dapat diambil: '),
             SizedBox(height: 4),
-            orderList.when(
-              data: (orders) => Text(orders
-                  .map(
-                    (o) =>
-                        '${o.id}: ${o.order_items?.map((e) => e.product?.name).join(', ')}',
-                  )
-                  .join('\n')),
-              loading: () => Text('loading'),
-              error: (e, s) => Text('error: $e'),
+            Expanded(
+              child: orderList.when(
+                data: (orders) => PageView(
+                  children: orders.map<OrderListItem>((order) {
+                    return OrderListItem(order: order);
+                  }).toList(),
+                ),
+                loading: () => Text('loading'),
+                error: (e, s) => Text('error: $e'),
+              ),
             ),
+            
           ],
         ),
       ),
