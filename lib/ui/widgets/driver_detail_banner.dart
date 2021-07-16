@@ -6,14 +6,16 @@ class DriverDetailBanner extends StatelessWidget {
   final User driver;
   final Color? backgroundColor;
 
-  const DriverDetailBanner(
-      {Key? key, required this.driver, this.backgroundColor})
-      : super(key: key);
+  const DriverDetailBanner({
+    Key? key,
+    required this.driver,
+    this.backgroundColor,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 130,
+      height: 110,
       width: double.infinity,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -22,8 +24,7 @@ class DriverDetailBanner extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             CircleAvatar(
-              foregroundImage:
-                  NetworkImage(driver.profile_picture_url ?? ''),
+              foregroundImage: NetworkImage(driver.profile_picture_url ?? ''),
               radius: 72 / 2,
             ),
             Column(

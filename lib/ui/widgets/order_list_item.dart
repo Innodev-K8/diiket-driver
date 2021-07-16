@@ -13,26 +13,31 @@ class OrderListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int productCount = order.order_items
-            ?.fold<int>(0, (int value, item) => (item.quantity ?? 0) + value) ??
-        0;
-    final int productWeight = order.order_items?.fold<int>(
-            0, (int value, item) => (item.product?.weight ?? 0) + value) ??
-        0;
-    final int productPrice = order.order_items?.fold<int>(0, (int value, item) {
-          final quantity = item.quantity ?? 0;
-          final price = item.product?.price ?? 0;
+    final productCount = order.order_items?.fold(0, (int value, item) {
+      return value + (item.quantity ?? 0);
+    });
+    final productWeight = order.order_items?.fold(0, (int value, item) {
+      final quantity = item.quantity ?? 0;
+      final weight = item.product?.weight ?? 0;
 
-          return (quantity * price) + value;
-        }) ??
-        0;
+      return (quantity * weight) + value;
+    });
+
+    final productPrice = order.order_items?.fold(0, (int value, item) {
+      final quantity = item.quantity ?? 0;
+      final price = item.product?.price ?? 0;
+
+      return (quantity * price) + value;
+    });
+
+    final driverProfit = (order.delivery_fee ?? 0) + (order.pickup_fee ?? 0);
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+      margin: EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: ColorPallete.blueishGray,
         border: Border.all(
-          color: ColorPallete.lightGray,
+          color: ColorPallete.lightGray.withOpacity(0.3),
           width: 1,
         ),
         borderRadius: BorderRadius.circular(6),
@@ -66,7 +71,7 @@ class OrderListItem extends StatelessWidget {
           ),
           OrderDetailTile(
             title: 'Berat Barang',
-            value: '${productWeight / 1000} kg',
+            value: '${(productWeight ?? 0) / 1000} kg',
           ),
           OrderDetailTile(
             title: 'Total Biaya',
@@ -85,49 +90,46 @@ class OrderListItem extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      "1,02 km",
+                      "[WIP] km",
                       style: kTextTheme.headline3,
                     ),
+                    SizedBox(height: 5),
                     Text("Jarak"),
                   ],
                 ),
                 SizedBox(
-                  width: 28,
+                  width: 36,
                 ),
                 Column(
                   children: [
                     Text(
-                      "1,02 km",
+                      'Rp ${Helper.fmtPrice(driverProfit)}',
                       style: kTextTheme.headline3,
                     ),
-                    Text("Jarak"),
+                    SizedBox(height: 5),
+                    Text("Pendapatan"),
                   ],
                 )
               ],
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 22),
-            color: ColorPallete.backgroundColor,
-            child: Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    child: Text("Tolak"),
-                    onPressed: () {},
-                  ),
-                ),
-                SizedBox(
-                  width: 16,
-                ),
-                Expanded(
-                  flex: 2,
-                  child: ElevatedButton(
-                    child: Text("Ambil Pesananan"),
-                    onPressed: () {},
-                  ),
-                )
-              ],
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: ColorPallete.backgroundColor,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(6),
+                bottomRight: Radius.circular(6),
+              ),
+            ),
+            child: SizedBox(
+              width: double.infinity,
+              height: 46.0,
+              child: ElevatedButton(
+                child: Text("Ambil"),
+                style: ElevatedButton.styleFrom(elevation: 0),
+                onPressed: () {},
+              ),
             ),
           )
         ],

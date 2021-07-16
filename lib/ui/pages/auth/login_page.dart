@@ -1,4 +1,4 @@
-import 'package:diiket_models/src/custom_exception.dart';
+import 'package:diiket_models/all.dart';
 import 'package:driver/data/providers/auth/auth_provider.dart';
 import 'package:driver/ui/common/styles.dart';
 import 'package:driver/ui/common/utils.dart';
