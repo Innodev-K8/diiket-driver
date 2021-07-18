@@ -24,7 +24,11 @@ dependencies:
   flutter:
     sdk: flutter
   diiket_models:
-    git: git@github.com:Innodev-K8/diiket-models.git
+    git:
+      url: git@github.com:Innodev-K8/diiket-models.git
+      ref: 9ec5948
+  pusher_client:
+    git: git@github.com:Innodev-K8/pusher_client.git
   cupertino_icons: ^1.0.2
   firebase_auth: ^1.4.1
   firebase_core: ^1.3.0
@@ -34,6 +38,7 @@ dependencies:
   flutter_hooks: ^0.17.0
   google_fonts: ^2.1.0
   hooks_riverpod: ^0.14.0+4
+  implicitly_animated_list: ^2.1.0
   intl: ^0.17.0
   logger: ^1.0.0
   shared_preferences: ^2.0.6

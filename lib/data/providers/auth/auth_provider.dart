@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:driver/data/notification/notification_topic.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:diiket_models/all.dart';
 import 'package:driver/data/network/auth_service.dart';
@@ -45,6 +46,7 @@ class AuthState extends StateNotifier<User?> {
     try {
       state = await _authService.me();
 
+      await subscribeToMarketDriverNotificationTopic(state);
     } on CustomException catch (error) {
       _read(authExceptionProvider).state = error;
     } finally {
@@ -54,8 +56,12 @@ class AuthState extends StateNotifier<User?> {
 
   Future<void> signInWithEmailAndPassword(String email, String password) async {
     try {
+      _read(authLoadingProvider).state = true;
+
+      final fcmToken = await _read(messagingProvider).getToken();
+
       final AuthResponse response =
-          await _authService.loginWithEmailPassword(email, password);
+          await _authService.loginWithEmailPassword(email, password, fcmToken);
 
       if (response.token != null && response.user != null) {
         await _read(tokenProvider.notifier).setToken(response.token!);
@@ -63,11 +69,15 @@ class AuthState extends StateNotifier<User?> {
             .setUserIdentifier('${response.user!.id}#${response.user!.name}');
 
         state = response.user;
+
+        await subscribeToMarketDriverNotificationTopic(state);
       } else {
         await signOut();
       }
     } on CustomException catch (error) {
       _read(authExceptionProvider).state = error;
+    } finally {
+      _read(authLoadingProvider).state = false;
     }
   }
 
@@ -77,6 +87,7 @@ class AuthState extends StateNotifier<User?> {
 
       await _authService.logout().onError((error, stackTrace) => null);
       await _read(tokenProvider.notifier).clearToken();
+      await unSubscribeToMarketDriverNotificationTopic(state);
 
       state = null;
 

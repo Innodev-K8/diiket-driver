@@ -61,8 +61,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: HEAD
-      resolved-ref: "6223eee447c106523fdb3da21004e162e543348c"
+      ref: "9ec5948"
+      resolved-ref: "9ec594800a24f2d80b0b6d4b57188012f65e7bc0"
       url: "git@github.com:Innodev-K8/diiket-models.git"
     source: git
     version: "0.0.1"
@@ -298,6 +298,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
+  implicitly_animated_list:
+    dependency: "direct main"
+    description:
+      name: implicitly_animated_list
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0"
   intl:
     dependency: "direct main"
     description:
@@ -319,6 +326,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.1"
+  list_diff:
+    dependency: transitive
+    description:
+      name: list_diff
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   logger:
     dependency: "direct main"
     description:
@@ -410,6 +424,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.1"
+  pusher_client:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: b866f3a2acb0cc7c0128127df77fb859bccc2c67
+      url: "git@github.com:Innodev-K8/pusher_client.git"
+    source: git
+    version: "1.1.3"
   riverpod:
     dependency: transitive
     description:

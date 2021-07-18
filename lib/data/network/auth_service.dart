@@ -18,6 +18,9 @@ class AuthService {
   Future<AuthResponse> loginWithEmailPassword(
     String email,
     String password,
+    [
+    String? fcmToken,
+  ]
   ) async {
     try {
       final response = await _dio.post(
@@ -25,6 +28,7 @@ class AuthService {
         data: {
           'email': email,
           'password': password,
+          'fcm_token': fcmToken,
           'device_name': 'mobile',
         },
       );
