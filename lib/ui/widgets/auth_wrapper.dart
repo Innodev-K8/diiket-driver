@@ -1,5 +1,6 @@
 import 'package:diiket_models/all.dart';
 import 'package:driver/data/providers/auth/auth_provider.dart';
+import 'package:driver/ui/common/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -9,15 +10,25 @@ class AuthWrapper extends HookWidget {
   final Widget Function()? guest;
 
   final bool isAnimated;
+  final bool showLoading;
 
   AuthWrapper({
     this.auth,
     this.guest,
     this.isAnimated = true,
+    this.showLoading = false,
   });
 
   Widget build(BuildContext context) {
     final User? user = useProvider(authProvider);
+    final bool isLoading = useProvider(authLoadingProvider).state;
+
+    if (showLoading && isLoading)
+      return Container(
+        alignment: Alignment.center,
+        color: ColorPallete.backgroundColor,
+        child: CircularProgressIndicator(),
+      );
 
     Widget child = user == null
         ? (guest?.call() ?? SizedBox.shrink())

@@ -29,37 +29,41 @@ class LoginPage extends HookWidget {
             padding: const EdgeInsets.all(24),
             child: Form(
               key: formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'Masuk',
-                    style: kTextTheme.headline1,
-                  ),
-                  TextFormField(
-                    controller: emailController,
-                    decoration: InputDecoration(hintText: 'Email'),
-                  ),
-                  TextFormField(
-                    controller: passwordController,
-                    decoration: InputDecoration(hintText: 'Password'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      FocusScope.of(context).unfocus();
+              child: AutofillGroup(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Masuk',
+                      style: kTextTheme.headline1,
+                    ),
+                    TextFormField(
+                      controller: emailController,
+                      decoration: InputDecoration(hintText: 'Email'),
+                      autofillHints: [AutofillHints.email],
+                    ),
+                    TextFormField(
+                      controller: passwordController,
+                      decoration: InputDecoration(hintText: 'Password'),
+                      autofillHints: [AutofillHints.password],
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        FocusScope.of(context).unfocus();
 
-                      if (!formKey.currentState!.validate()) return;
+                        if (!formKey.currentState!.validate()) return;
 
-                      context
-                          .read(authProvider.notifier)
-                          .signInWithEmailAndPassword(
-                            emailController.text,
-                            passwordController.text,
-                          );
-                    },
-                    child: Text('Masuk'),
-                  ),
-                ],
+                        context
+                            .read(authProvider.notifier)
+                            .signInWithEmailAndPassword(
+                              emailController.text,
+                              passwordController.text,
+                            );
+                      },
+                      child: Text('Masuk'),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

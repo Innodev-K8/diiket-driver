@@ -6,6 +6,8 @@ import 'package:driver/data/providers/firebase_provider.dart';
 
 import 'token_provider.dart';
 
+final authLoadingProvider = StateProvider<bool>((_) => true);
+
 final authProvider = StateNotifierProvider<AuthState, User?>((ref) {
   return AuthState(
     ref.read(authServiceProvider),
@@ -42,8 +44,11 @@ class AuthState extends StateNotifier<User?> {
   Future<void> refreshProfile() async {
     try {
       state = await _authService.me();
+
     } on CustomException catch (error) {
       _read(authExceptionProvider).state = error;
+    } finally {
+      _read(authLoadingProvider).state = false;
     }
   }
 
@@ -68,12 +73,14 @@ class AuthState extends StateNotifier<User?> {
 
   Future<void> signOut() async {
     try {
-      if (_read(tokenProvider) != null) {
-        await _authService.logout().onError((error, stackTrace) => null);
-        await _read(tokenProvider.notifier).clearToken();
-      }
+      _read(authLoadingProvider).state = true;
+
+      await _authService.logout().onError((error, stackTrace) => null);
+      await _read(tokenProvider.notifier).clearToken();
 
       state = null;
+
+      _read(authLoadingProvider).state = false;
     } on CustomException catch (error) {
       _read(authExceptionProvider).state = error;
     }

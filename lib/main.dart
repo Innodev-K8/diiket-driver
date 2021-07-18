@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
         HomePage.route: (_) => AuthWrapper(
               auth: (_) => HomePage(),
               guest: () => LoginPage(),
+              showLoading: true,
             ),
         OrderPage.route: (_) => AuthWrapper(
               auth: (_) => OrderPage(),

@@ -1,3 +1,4 @@
+import 'package:diiket_models/all.dart';
 import 'package:driver/data/providers/auth/auth_provider.dart';
 import 'package:driver/data/providers/order/available_orders_provider.dart';
 import 'package:driver/ui/widgets/driver_detail_banner.dart';
@@ -35,7 +36,7 @@ class HomePage extends HookWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            DriverDetailBanner(driver: driver!),
+            DriverDetailBanner(driver: driver ?? User()),
             Divider(height: 0),
 
             // ElevatedButton(
