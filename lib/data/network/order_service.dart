@@ -30,6 +30,13 @@ class OrderService {
     try {
       await _dio.post(_('$orderId/claim'));
     } on DioError catch (error) {
+      if (error.response?.statusCode == 422) {
+        throw CustomException(
+          message: error.response?.data['message'],
+          code: 422,
+        );
+      }
+
       throw CustomException.fromDioError(error);
     }
   }
@@ -38,7 +45,7 @@ class OrderService {
     try {
       final response = await _dio.get(_('active'));
 
-      return Order.fromJson(response.data);
+      return Order.fromJson(response.data['data']);
     } on DioError catch (error) {
       if (error.response?.statusCode == 404) {
         return null;

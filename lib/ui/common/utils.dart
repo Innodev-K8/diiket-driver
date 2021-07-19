@@ -1,3 +1,4 @@
+import 'package:driver/ui/common/styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +8,58 @@ class Utils {
       SnackBar(
         content: Text(message),
       ),
+    );
+  }
+
+  static Future<void> prompt(
+    BuildContext context, {
+    String title = 'Perhatian',
+    String description = '',
+    String cancelText = 'Batal',
+    String confirmText = 'Kembali',
+    Function()? onConfirm,
+    Function()? onCancel,
+  }) async {
+    // set up the buttons
+    final Widget cancelButton = TextButton(
+      child: Text(cancelText),
+      onPressed: () {
+        Navigator.of(context).pop();
+
+        onCancel?.call();
+      },
+    );
+
+    final Widget continueButton = ElevatedButton(
+      child: Text(confirmText),
+      style: ElevatedButton.styleFrom(
+        elevation: 0,
+      ),
+      onPressed: () {
+        Navigator.of(context).pop();
+
+        onConfirm?.call();
+      },
+    );
+
+    // set up the AlertDialog
+    final AlertDialog alert = AlertDialog(
+      title: Text(
+        title,
+        style: kTextTheme.headline2!.copyWith(color: ColorPallete.textColor),
+      ),
+      content: Text(description),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+      insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (_) => alert,
     );
   }
 }

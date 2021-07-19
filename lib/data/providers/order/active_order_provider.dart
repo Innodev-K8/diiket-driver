@@ -1,9 +1,15 @@
 import 'package:diiket_models/all.dart';
 import 'package:driver/data/network/order_service.dart';
+import 'package:driver/data/providers/order/available_orders_provider.dart';
+import 'package:driver/helpers/casting_helper.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final activeOrderErrorProvider = StateProvider<CustomException?>((ref) {
   return null;
+});
+
+final activeOrderLoadingProvider = StateProvider<bool>((ref) {
+  return true;
 });
 
 final activeOrderProvider =
@@ -21,8 +27,15 @@ class ActiveOrderNotifier extends StateNotifier<Order?> {
   Future<void> fetchActiveOrder() async {
     try {
       state = await _read(orderServiceProvider).getActiveOrder();
-    } catch (e) {
-      _read(activeOrderErrorProvider).state = e as CustomException;
+    } catch (exception) {
+      _read(activeOrderErrorProvider).state = castOrFallback(
+        exception,
+        CustomException(
+          message: exception.toString(),
+        ),
+      );
+    } finally {
+      _read(activeOrderLoadingProvider).state = false;
     }
   }
 
@@ -32,8 +45,11 @@ class ActiveOrderNotifier extends StateNotifier<Order?> {
     try {
       await _read(orderServiceProvider).claimOrder(order.id!);
       await fetchActiveOrder();
-    } catch (e) {
-      _read(activeOrderErrorProvider).state = e as CustomException;
+
+      _read(availableOrdersProvider.notifier).unbindEvents();
+      _read(availableOrdersProvider.notifier).removeOrderFromList(order);
+    } catch (exception) {
+      _read(activeOrderErrorProvider).state = exception as CustomException;
     }
   }
 
@@ -41,8 +57,8 @@ class ActiveOrderNotifier extends StateNotifier<Order?> {
     try {
       await _read(orderServiceProvider).deliverOrder();
       await fetchActiveOrder();
-    } catch (e) {
-      _read(activeOrderErrorProvider).state = e as CustomException;
+    } catch (exception) {
+      _read(activeOrderErrorProvider).state = exception as CustomException;
     }
   }
 
@@ -50,6 +66,11 @@ class ActiveOrderNotifier extends StateNotifier<Order?> {
     try {
       await _read(orderServiceProvider).completeOrder();
       await fetchActiveOrder();
+
+      // get fresh available orders and
+      // re-binds to order events if we done with current order
+      await _read(availableOrdersProvider.notifier).fetchAvailableOrders();
+      await _read(availableOrdersProvider.notifier).bindEvents();
     } catch (e) {
       _read(activeOrderErrorProvider).state = e as CustomException;
     }

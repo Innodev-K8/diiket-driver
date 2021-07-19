@@ -62,16 +62,18 @@ class HomePage extends HookWidget {
               SizedBox(height: 4),
               Expanded(
                 child: orderList.when(
-                  data: (orders) => ImplicitlyAnimatedList<Order>(
-                    itemData: orders,
-                    scrollDirection: Axis.vertical,
-                    physics: PageScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (BuildContext context, Order order) =>
-                        SingleChildScrollView(
-                      child: OrderListItem(order: order),
-                    ),
-                  ),
+                  data: (orders) => orders.isEmpty
+                      ? _buildEmptyOrder()
+                      : ImplicitlyAnimatedList<Order>(
+                          itemData: orders,
+                          scrollDirection: Axis.vertical,
+                          physics: PageScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext context, Order order) =>
+                              SingleChildScrollView(
+                            child: OrderListItem(order: order),
+                          ),
+                        ),
                   loading: () => Text('loading'),
                   error: (e, s) => Text('error: $e'),
                 ),
@@ -80,6 +82,12 @@ class HomePage extends HookWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Center _buildEmptyOrder() {
+    return Center(
+      child: Text('Belum ada pesanan...'),
     );
   }
 

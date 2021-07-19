@@ -1,7 +1,10 @@
 import 'package:diiket_models/all.dart';
+import 'package:driver/data/providers/order/active_order_provider.dart';
 import 'package:driver/ui/common/helper.dart';
 import 'package:driver/ui/common/styles.dart';
+import 'package:driver/ui/common/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class OrderListItem extends StatelessWidget {
   final Order order;
@@ -118,10 +121,23 @@ class OrderListItem extends StatelessWidget {
               width: double.infinity,
               height: 46.0,
               child: ElevatedButton(
-                child: Text("Ambil"),
-                style: ElevatedButton.styleFrom(elevation: 0),
-                onPressed: () {},
-              ),
+                  child: Text("Terima"),
+                  style: ElevatedButton.styleFrom(elevation: 0),
+                  onPressed: () {
+                    Utils.prompt(
+                      context,
+                      title: "Perhatian",
+                      description:
+                          "Apa Anda yakin ingin menerima pesanan ini? Anda tidak dapat membatalkan pesanan yang sudah diterima dan harus menyelesaikanya.",
+                      cancelText: "Batal",
+                      confirmText: "Terima",
+                      onConfirm: () async {
+                        await context
+                            .read(activeOrderProvider.notifier)
+                            .claimOrder(order);
+                      },
+                    );
+                  }),
             ),
           )
         ],

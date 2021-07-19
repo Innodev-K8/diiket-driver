@@ -3,6 +3,7 @@ import 'package:driver/ui/common/theme.dart';
 import 'package:driver/ui/pages/home_page.dart';
 import 'package:driver/ui/pages/auth/login_page.dart';
 import 'package:driver/ui/pages/order_page.dart';
+import 'package:driver/ui/widgets/active_order_wrapper.dart';
 import 'package:driver/ui/widgets/auth_wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -39,7 +40,10 @@ class _MyAppState extends State<MyApp> {
       initialRoute: HomePage.route,
       routes: {
         HomePage.route: (_) => AuthWrapper(
-              auth: (_) => HomePage(),
+              auth: (_) => ActiveOrderWrapper(
+                onFree: () => HomePage(),
+                onHaveActiveOrder: (_) => OrderPage(),
+              ),
               guest: () => LoginPage(),
               showLoading: true,
             ),
