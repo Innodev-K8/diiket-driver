@@ -24,4 +24,12 @@ abstract class Helper {
   static String fmtPrice([int? price = 0]) {
     return currencyFormatter.format(price);
   }
+
+  static String fmtMetricDistance(int distanceInMeter) {
+    if (distanceInMeter < 1000) {
+      return '$distanceInMeter m';
+    } else {
+      return '${(distanceInMeter / 1000).toStringAsFixed(2)} km';
+    }
+  }
 }

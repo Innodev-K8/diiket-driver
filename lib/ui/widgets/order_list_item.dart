@@ -16,19 +16,11 @@ class OrderListItem extends StatelessWidget {
     final productCount = order.order_items?.fold(0, (int value, item) {
       return value + (item.quantity ?? 0);
     });
-    final productWeight = order.order_items?.fold(0, (int value, item) {
-      final quantity = item.quantity ?? 0;
-      final weight = item.product?.weight ?? 0;
 
-      return (quantity * weight) + value;
-    });
-
-    final productPrice = order.order_items?.fold(0, (int value, item) {
-      final quantity = item.quantity ?? 0;
-      final price = item.product?.price ?? 0;
-
-      return (quantity * price) + value;
-    });
+    final productWeight = order.total_weight;
+    final productPrice = order.products_price;
+    final deliveryDistance =
+        Helper.fmtMetricDistance(order.delivery_distance ?? 0);
 
     final driverProfit = (order.delivery_fee ?? 0) + (order.pickup_fee ?? 0);
 
@@ -90,7 +82,7 @@ class OrderListItem extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      "[WIP] km",
+                      deliveryDistance,
                       style: kTextTheme.headline3,
                     ),
                     SizedBox(height: 5),

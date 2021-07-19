@@ -26,7 +26,7 @@ dependencies:
   diiket_models:
     git:
       url: git@github.com:Innodev-K8/diiket-models.git
-      ref: 9ec5948
+      ref: 6f0e867
   pusher_client:
     git: git@github.com:Innodev-K8/pusher_client.git
   cupertino_icons: ^1.0.2
