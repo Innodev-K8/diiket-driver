@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'interceptors/auth_interceptor.dart';
@@ -15,8 +14,8 @@ class ApiService {
   static Dio create() {
     final dio = Dio(
       BaseOptions(
-        baseUrl: kReleaseMode ? productionUrl : debuggingUrl,
-        // baseUrl: productionUrl,
+        // baseUrl: kReleaseMode ? productionUrl : debuggingUrl,
+        baseUrl: productionUrl,
         headers: {
           'Accept': 'application/json',
         },
