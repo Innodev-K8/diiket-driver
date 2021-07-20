@@ -27,6 +27,12 @@ class ActiveOrderNotifier extends StateNotifier<Order?> {
   Future<void> fetchActiveOrder() async {
     try {
       state = await _read(orderServiceProvider).getActiveOrder();
+
+
+      // make sure to disconnect from pusher when we have active order
+      if (state != null) {
+        _read(availableOrdersProvider.notifier).disconnectFromPusher();
+      }
     } catch (exception) {
       _read(activeOrderErrorProvider).state = castOrFallback(
         exception,
@@ -46,7 +52,7 @@ class ActiveOrderNotifier extends StateNotifier<Order?> {
       await _read(orderServiceProvider).claimOrder(order.id!);
       await fetchActiveOrder();
 
-      _read(availableOrdersProvider.notifier).unbindEvents();
+      _read(availableOrdersProvider.notifier).disconnectFromPusher();
       _read(availableOrdersProvider.notifier).removeOrderFromList(order);
     } catch (exception) {
       _read(activeOrderErrorProvider).state = exception as CustomException;
@@ -68,9 +74,9 @@ class ActiveOrderNotifier extends StateNotifier<Order?> {
       await fetchActiveOrder();
 
       // get fresh available orders and
-      // re-binds to order events if we done with current order
+      // reconnect to pusher if we done with current order
       await _read(availableOrdersProvider.notifier).fetchAvailableOrders();
-      await _read(availableOrdersProvider.notifier).bindEvents();
+      await _read(availableOrdersProvider.notifier).connectToPusher();
     } catch (e) {
       _read(activeOrderErrorProvider).state = e as CustomException;
     }
