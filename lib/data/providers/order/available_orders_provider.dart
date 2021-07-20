@@ -68,6 +68,7 @@ class AvailableOrdersNotifier extends StateNotifier<AsyncValue<List<Order>>> {
     ]);
 
     await _read(pusherProvider).unsubscribe(_channel!.name);
+    await _read(pusherProvider).disconnect();
   }
 
   @override
