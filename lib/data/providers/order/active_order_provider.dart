@@ -71,7 +71,9 @@ class ActiveOrderNotifier extends StateNotifier<Order?> {
   Future<void> completeOrder() async {
     try {
       await _read(orderServiceProvider).completeOrder();
-      await fetchActiveOrder();
+      
+      // we know if this code is excecuted, completeOrder was successfuly executed
+      state = null;
 
       // get fresh available orders and
       // reconnect to pusher if we done with current order
