@@ -30,6 +30,7 @@ dependencies:
   pusher_client:
     git: git@github.com:Innodev-K8/pusher_client.git
   cupertino_icons: ^1.0.2
+  firebase_analytics: ^8.2.0
   firebase_auth: ^1.4.1
   firebase_core: ^1.3.0
   firebase_crashlytics: ^2.0.6

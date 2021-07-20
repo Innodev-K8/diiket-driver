@@ -63,7 +63,7 @@ class HomePage extends HookWidget {
               Expanded(
                 child: orderList.when(
                   data: (orders) => orders.isEmpty
-                      ? _buildEmptyOrder()
+                      ? Center(child: Text('Belum ada pesanan...'))
                       : ImplicitlyAnimatedList<Order>(
                           itemData: orders,
                           scrollDirection: Axis.vertical,
@@ -74,20 +74,14 @@ class HomePage extends HookWidget {
                             child: OrderListItem(order: order),
                           ),
                         ),
-                  loading: () => Text('loading'),
-                  error: (e, s) => Text('error: $e'),
+                  loading: () => Center(child: CircularProgressIndicator()),
+                  error: (e, s) => Center(child: Text('error: $e')),
                 ),
               ),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  Center _buildEmptyOrder() {
-    return Center(
-      child: Text('Belum ada pesanan...'),
     );
   }
 
