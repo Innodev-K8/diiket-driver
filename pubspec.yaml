@@ -46,6 +46,7 @@ dependencies:
   logger: ^1.0.0
   maps_launcher: ^2.0.0
   shared_preferences: ^2.0.6
+  stream_chat_flutter: ^2.0.0
 
 dev_dependencies:
   flutter_test:
