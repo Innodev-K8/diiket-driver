@@ -1,6 +1,7 @@
 import 'package:diiket_models/all.dart';
 import 'package:driver/data/providers/order/active_order_provider.dart';
 import 'package:driver/ui/common/utils.dart';
+import 'package:driver/ui/pages/chat/chat_driver_button.dart';
 import 'package:driver/ui/widgets/small_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -38,6 +39,10 @@ class PurcashingOrderPage extends HookWidget {
             child: Center(
               child: Text('ini Driver Purcashing Order Page'),
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10.0),
+            child: ChatCustomerButton(),
           ),
           Container(
             width: double.infinity,

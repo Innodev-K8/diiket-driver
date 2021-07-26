@@ -1,6 +1,7 @@
 import 'package:diiket_models/all.dart';
 import 'package:driver/data/network/order_service.dart';
 import 'package:driver/data/providers/order/available_orders_provider.dart';
+import 'package:driver/data/providers/order/chat/chat_channel_provider.dart';
 import 'package:driver/helpers/casting_helper.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -71,6 +72,7 @@ class ActiveOrderNotifier extends StateNotifier<Order?> {
   Future<void> completeOrder() async {
     try {
       await _read(orderServiceProvider).completeOrder();
+      await _read(orderChatChannelProvider.notifier).disconnect();
       
       // we know if this code is excecuted, completeOrder was successfuly executed
       state = null;
