@@ -52,22 +52,24 @@ class PurcashingOrderPage extends HookWidget {
               child: Text('ini Driver Purcashing Order Page'),
             ),
           ),
+          // sementara
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: ChatCustomerButton(),
+          ),
           Container(
             width: double.infinity,
             height: 45,
             padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
+            margin: const EdgeInsets.symmetric(vertical: 10),
+            child: OutlinedButton(
+              style: OutlinedButton.styleFrom(
                 primary: ColorPallete.errorColor,
               ),
               child:
                   isLoading.value ? SmallLoading() : Text('Batalkan Pesanan'),
               onPressed: isLoading.value ? null : cancelOrder,
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10.0),
-            child: ChatCustomerButton(),
           ),
           Container(
             width: double.infinity,
