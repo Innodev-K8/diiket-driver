@@ -1,5 +1,6 @@
 import 'package:diiket_models/all.dart';
 import 'package:driver/data/providers/order/active_order_provider.dart';
+import 'package:driver/ui/common/styles.dart';
 import 'package:driver/ui/common/utils.dart';
 import 'package:driver/ui/pages/chat/chat_driver_button.dart';
 import 'package:driver/ui/widgets/small_loading.dart';
@@ -17,15 +18,26 @@ class PurcashingOrderPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isLoadingDelivering = useState<bool>(false);
+    final isLoading = useState<bool>(false);
+    final isMounted = useIsMounted();
 
-    void completePurcashe() {
-      _confirm(context, () async {
-        isLoadingDelivering.value = true;
+    void completePurchase() {
+      _confirmComplete(context, () async {
+        isLoading.value = true;
 
         await context.read(activeOrderProvider.notifier).deliverOrder();
 
-        isLoadingDelivering.value = false;
+        if (isMounted()) isLoading.value = false;
+      });
+    }
+
+    void cancelOrder() {
+      _confirmCancel(context, () async {
+        isLoading.value = true;
+
+        await context.read(activeOrderProvider.notifier).cancelOrder();
+
+        if (isMounted()) isLoading.value = false;
       });
     }
 
@@ -40,6 +52,19 @@ class PurcashingOrderPage extends HookWidget {
               child: Text('ini Driver Purcashing Order Page'),
             ),
           ),
+          Container(
+            width: double.infinity,
+            height: 45,
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: ColorPallete.errorColor,
+              ),
+              child:
+                  isLoading.value ? SmallLoading() : Text('Batalkan Pesanan'),
+              onPressed: isLoading.value ? null : cancelOrder,
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10.0),
             child: ChatCustomerButton(),
@@ -50,10 +75,10 @@ class PurcashingOrderPage extends HookWidget {
             padding: const EdgeInsets.symmetric(horizontal: 24),
             margin: const EdgeInsets.only(bottom: 24),
             child: ElevatedButton(
-              child: isLoadingDelivering.value
+              child: isLoading.value
                   ? SmallLoading()
                   : Text('Selesai Membeli Pesanan'),
-              onPressed: isLoadingDelivering.value ? null : completePurcashe,
+              onPressed: isLoading.value ? null : completePurchase,
             ),
           ),
         ],
@@ -61,12 +86,23 @@ class PurcashingOrderPage extends HookWidget {
     );
   }
 
-  void _confirm(BuildContext context, Future Function() onConfirm) {
+  void _confirmComplete(BuildContext context, Future Function() onConfirm) {
     Utils.prompt(
       context,
       title: 'Perhatian',
       description:
           'Pastikan barang pesanan sudah berada di tangan dan siap diantar.',
+      cancelText: 'Tidak',
+      confirmText: 'Ya',
+      onConfirm: onConfirm,
+    );
+  }
+
+  void _confirmCancel(BuildContext context, Future Function() onConfirm) {
+    Utils.prompt(
+      context,
+      title: 'Perhatian',
+      description: 'Apa Anda yakin ingin membatalkan pesanan ini?.',
       cancelText: 'Tidak',
       confirmText: 'Ya',
       onConfirm: onConfirm,

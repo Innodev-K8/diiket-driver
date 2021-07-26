@@ -16,6 +16,8 @@ class ColorPallete {
 
   static const infoColor = Color(0xFF0D6EFD);
   static const successColor = Color(0xFF00B894);
+  static const warningColor = Color(0xFFFFC107);
+  static const errorColor = Color(0xFFDC3545);
 
   static const textColor = accentColor;
 }

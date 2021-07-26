@@ -55,6 +55,14 @@ class OrderService {
     }
   }
 
+  Future<void> cancelOrder() async {
+    try {
+      await _dio.post(_('active/cancel'));
+    } on DioError catch (error) {
+      throw CustomException.fromDioError(error);
+    }
+  }
+
   Future<void> deliverOrder() async {
     try {
       await _dio.post(_('active/deliver'));

@@ -29,7 +29,6 @@ class ActiveOrderNotifier extends StateNotifier<Order?> {
     try {
       state = await _read(orderServiceProvider).getActiveOrder();
 
-
       // make sure to disconnect from pusher when we have active order
       if (state != null) {
         _read(availableOrdersProvider.notifier).disconnectFromPusher();
@@ -69,11 +68,28 @@ class ActiveOrderNotifier extends StateNotifier<Order?> {
     }
   }
 
+  Future<void> cancelOrder() async {
+    try {
+      await _read(orderServiceProvider).cancelOrder();
+      await _read(orderChatChannelProvider.notifier).disconnect();
+
+      // we know if this code is excecuted, cancelOrder was successfuly executed
+      state = null;
+
+      // get fresh available orders and
+      // reconnect to pusher if we done with current order
+      await _read(availableOrdersProvider.notifier).fetchAvailableOrders();
+      await _read(availableOrdersProvider.notifier).connectToPusher();
+    } catch (exception) {
+      _read(activeOrderErrorProvider).state = exception as CustomException;
+    }
+  }
+
   Future<void> completeOrder() async {
     try {
       await _read(orderServiceProvider).completeOrder();
       await _read(orderChatChannelProvider.notifier).disconnect();
-      
+
       // we know if this code is excecuted, completeOrder was successfuly executed
       state = null;
 
