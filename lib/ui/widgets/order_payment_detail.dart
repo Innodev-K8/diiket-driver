@@ -1,7 +1,8 @@
 import 'package:diiket_models/all.dart';
-import 'package:driver/ui/common/helper.dart';
 import 'package:driver/ui/common/styles.dart';
 import 'package:flutter/material.dart';
+
+import 'detail_item.dart';
 
 class OrderPaymentDetail extends StatelessWidget {
   final Order order;
@@ -18,22 +19,22 @@ class OrderPaymentDetail extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          PaymentDetailRecord(
+          DetailItem(
             title: 'Berat barang',
             value: Text('2 kg'),
           ),
           SizedBox(height: 16.0),
-          PaymentDetailRecord(
+          DetailItem(
             title: 'Ongkos belanja',
             value: Text('Rp. 1000'),
           ),
           SizedBox(height: 16.0),
-          PaymentDetailRecord(
+          DetailItem(
             title: 'Ongkos kirim',
             value: Text('Rp. 1000'),
           ),
           SizedBox(height: 16.0),
-          PaymentDetailRecord(
+          DetailItem(
             title: 'Biaya Layanan',
             value: Text('Rp. 1000'),
           ),
@@ -57,40 +58,6 @@ class OrderPaymentDetail extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class PaymentDetailRecord extends StatelessWidget {
-  final String title;
-  final Widget value;
-
-  const PaymentDetailRecord({
-    Key? key,
-    required this.title,
-    required this.value,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: kTextTheme.subtitle2!.copyWith(
-            color: ColorPallete.darkGray,
-          ),
-        ),
-        if (value is Text)
-          Text(
-            (value as Text).data ?? '',
-            style: (value as Text).style,
-            textAlign: TextAlign.end,
-          )
-        else
-          value
-      ],
     );
   }
 }

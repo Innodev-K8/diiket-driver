@@ -2,6 +2,8 @@ import 'package:diiket_models/all.dart';
 import 'package:driver/ui/common/styles.dart';
 import 'package:flutter/material.dart';
 
+import 'detail_item.dart';
+
 class CustomerDetail extends StatelessWidget {
   final Order order;
 
@@ -25,39 +27,20 @@ class CustomerDetail extends StatelessWidget {
           SizedBox(
             height: 10,
           ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Text(
-                  "Nama",
-                  style: kTextTheme.caption,
-                ),
-              ),
-              Expanded(
-                  child: Text(
-                order.user?.name ?? '-',
-                textAlign: TextAlign.end,
-              )),
-            ],
+          DetailItem(
+            title: 'Nama',
+            value: Text(
+              order.user?.name ?? '-',
+            ),
           ),
           SizedBox(
             height: 16,
           ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                  child: Text(
-                "Alamat",
-                style: kTextTheme.caption,
-              )),
-              Expanded(
-                  child: Text(
-                order.address ?? '-',
-                textAlign: TextAlign.end,
-              )),
-            ],
+          DetailItem(
+            title: 'Alamat',
+            value: Text(
+              order.address ?? '-',
+            ),
           ),
           SizedBox(
             height: 20,
