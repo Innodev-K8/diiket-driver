@@ -1,6 +1,8 @@
 import 'package:diiket_models/all.dart';
 import 'package:driver/ui/common/styles.dart';
+import 'package:driver/ui/common/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
 class OrderStallHeader extends StatelessWidget {
   final Stall stall;
@@ -46,14 +48,25 @@ class OrderStallHeader extends StatelessWidget {
                 flex: 2,
                 child: Text(
                   'Lt. ${stall.location_floor} Blok ${stall.location_block} No. ${stall.location_number}',
-                  style: kTextTheme.overline!
-                      .copyWith(color: Colors.white, fontSize: 12),
+                  style: kTextTheme.overline!.copyWith(
+                    color: Colors.white,
+                    fontSize: 12,
+                  ),
                 ),
               ),
               Spacer(),
               TextButton.icon(
                 style: TextButton.styleFrom(primary: ColorPallete.primaryColor),
-                onPressed: () {},
+                onPressed: () async {
+                  final phoneNumber = stall.seller?.phone_number;
+
+                  if (phoneNumber == null) {
+                    Utils.alert(context, 'Tidak  dapat menghubungi penjual');
+                    return;
+                  }
+
+                  await FlutterPhoneDirectCaller.callNumber(phoneNumber);
+                },
                 icon: Icon(Icons.phone),
                 label: Text("Telp"),
               ),
