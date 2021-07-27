@@ -8,7 +8,15 @@ import 'package:driver/ui/widgets/order_stall_header.dart';
 import 'package:driver/ui/widgets/small_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:grouped_list/grouped_list.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+class StallOrder {
+  final Stall? stall;
+  final List<OrderItem>? items;
+
+  StallOrder({this.stall, this.items});
+}
 
 class PurcashingOrderPage extends HookWidget {
   final Order order;
@@ -47,17 +55,30 @@ class PurcashingOrderPage extends HookWidget {
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
               child: OrderPaymentDetail(order: order),
             ),
-            SizedBox(
-              height: 20,
+            SizedBox(height: 20),
+            GroupedListView<OrderItem, Stall>(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              elements: order.order_items ?? [],
+              groupBy: (item) => item.product!.stall!,
+              groupComparator: (a, b) => 0,
+              groupSeparatorBuilder: (Stall stall) =>
+                  OrderStallHeader(stall: stall),
+              separator: Divider(),
+              itemBuilder: (context, item) => OrderChecklistItem(
+                orderItem: item,
+              ),
             ),
-            OrderStallHeader(),
-            OrderChecklistItem(),
+            SizedBox(height: 20),
             Container(
               width: double.infinity,
               height: 45,
               padding: const EdgeInsets.symmetric(horizontal: 24),
               margin: const EdgeInsets.only(bottom: 24),
               child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                ),
                 child: isLoading.value
                     ? SmallLoading()
                     : Text('Selesai Membeli Pesanan'),

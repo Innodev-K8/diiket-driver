@@ -38,6 +38,7 @@ dependencies:
   firebase_remote_config: ^0.10.0+2
   flutter_hooks: ^0.17.0
   google_fonts: ^2.1.0
+  grouped_list: ^4.1.0
   hooks_riverpod: ^0.14.0+4
   implicitly_animated_list: ^2.1.0
   intl: ^0.17.0
