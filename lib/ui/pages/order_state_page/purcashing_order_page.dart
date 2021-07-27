@@ -32,16 +32,6 @@ class PurcashingOrderPage extends HookWidget {
     final isLoading = useState<bool>(false);
     final isMounted = useIsMounted();
 
-    void completePurcashe() {
-      _confirmReadyToDeliver(context, () async {
-        isLoading.value = true;
-
-        await context.read(activeOrderProvider.notifier).deliverOrder();
-
-        isLoading.value = false;
-      });
-    }
-
     void cancelOrder() {
       _confirmCancelOrder(context, () async {
         isLoading.value = true;
@@ -96,23 +86,66 @@ class PurcashingOrderPage extends HookWidget {
               ),
             ),
             SizedBox(height: 8),
-            Container(
-              width: double.infinity,
-              height: 45,
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              margin: const EdgeInsets.only(bottom: 24),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  elevation: 0,
-                ),
-                child: isLoading.value
-                    ? SmallLoading()
-                    : Text('Selesai Membeli Pesanan'),
-                onPressed: isLoading.value ? null : completePurcashe,
-              ),
-            ),
+            DonePurchasingButton(isLoading: isLoading),
           ],
         ),
+      ),
+    );
+  }
+
+  void _confirmCancelOrder(BuildContext context, Future Function() onConfirm) {
+    Utils.prompt(
+      context,
+      title: 'Perhatian',
+      description: 'Apa Anda yakin ingin membatalkan pesanan ini?.',
+      cancelText: 'Tidak',
+      confirmText: 'Ya',
+      onConfirm: onConfirm,
+    );
+  }
+}
+
+class DonePurchasingButton extends HookWidget {
+  const DonePurchasingButton({
+    Key? key,
+    required this.isLoading,
+  }) : super(key: key);
+
+  final ValueNotifier<bool> isLoading;
+
+  @override
+  Widget build(BuildContext context) {
+    final isLoading = useState<bool>(false);
+    final isMounted = useIsMounted();
+
+    // disable the button if every order items are not checked
+    final isChecked = useProvider(activeOrderProvider.notifier).isChecked;
+
+    void completePurcashe() {
+      _confirmReadyToDeliver(context, () async {
+        if (isMounted()) isLoading.value = true;
+
+        await context.read(activeOrderProvider.notifier).deliverOrder();
+
+        if (isMounted()) isLoading.value = false;
+      });
+    }
+
+    return Container(
+      width: double.infinity,
+      height: 45,
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      margin: const EdgeInsets.only(bottom: 24),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          elevation: 0,
+          primary: ColorPallete.primaryColor,
+          onSurface: ColorPallete.darkGray,
+        ),
+        child:
+            isLoading.value ? SmallLoading()
+            : Text('Selesai Membeli Barang'),
+        onPressed: isLoading.value || !isChecked ? null : completePurcashe,
       ),
     );
   }
@@ -126,17 +159,6 @@ class PurcashingOrderPage extends HookWidget {
       title: 'Perhatian',
       description:
           'Pastikan barang pesanan sudah berada di tangan dan siap diantar.',
-      cancelText: 'Tidak',
-      confirmText: 'Ya',
-      onConfirm: onConfirm,
-    );
-  }
-
-  void _confirmCancelOrder(BuildContext context, Future Function() onConfirm) {
-    Utils.prompt(
-      context,
-      title: 'Perhatian',
-      description: 'Apa Anda yakin ingin membatalkan pesanan ini?.',
       cancelText: 'Tidak',
       confirmText: 'Ya',
       onConfirm: onConfirm,

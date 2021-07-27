@@ -24,6 +24,14 @@ class ActiveOrderNotifier extends StateNotifier<Order?> {
     fetchActiveOrder();
   }
 
+  // returns true if all the order items status are not waiting
+  bool get isChecked {
+    return state?.order_items?.every(
+          (item) => item.status != OrderItemStatus.waiting,
+        ) ??
+        false;
+  }
+
   Future<void> fetchActiveOrder() async {
     try {
       state = await _read(orderServiceProvider).getActiveOrder();
@@ -54,6 +62,45 @@ class ActiveOrderNotifier extends StateNotifier<Order?> {
       _read(availableOrdersProvider.notifier).disconnectFromPusher();
       _read(availableOrdersProvider.notifier).removeOrderFromList(order);
     } catch (exception) {
+      _read(activeOrderErrorProvider).state = exception as CustomException;
+    }
+  }
+
+  Future<void> updateOrderItemStatus(
+    OrderItem orderItem,
+    OrderItemStatus orderItemStatus,
+  ) async {
+    // throw error if state is empty
+    if (state == null) {
+      throw CustomException(
+        message: 'Tidak terdapat order aktif',
+      );
+    }
+
+    // update local data, post, assert if it was successful, if not, just revert
+    final orderItems = state!.order_items ?? [];
+
+    try {
+      // update order item in order items
+      state = state!.copyWith(
+        order_items: [
+          for (var item in orderItems)
+            if (item.id == orderItem.id)
+              item.copyWith(status: orderItemStatus)
+            else
+              item,
+        ],
+      );
+
+      // update order item in the server
+      await _read(orderServiceProvider)
+          .updateOrderItemStatus(orderItem, orderItemStatus);
+    } catch (exception) {
+      // revert state
+      state = state!.copyWith(
+        order_items: orderItems,
+      );
+
       _read(activeOrderErrorProvider).state = exception as CustomException;
     }
   }

@@ -1,8 +1,10 @@
 import 'package:diiket_models/all.dart';
+import 'package:driver/data/providers/order/active_order_provider.dart';
 import 'package:driver/ui/common/helper.dart';
 import 'package:driver/ui/common/styles.dart';
 import 'package:driver/ui/widgets/checklist_button.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class OrderChecklistItem extends StatelessWidget {
   final OrderItem orderItem;
@@ -68,7 +70,25 @@ class OrderChecklistItem extends StatelessWidget {
             initialValue: orderItem.status == OrderItemStatus.waiting
                 ? null
                 : orderItem.status == OrderItemStatus.picked,
-            onToggled: (state) {},
+            onToggled: (state) {
+              late OrderItemStatus status;
+
+              switch (state) {
+                case null:
+                  status = OrderItemStatus.waiting;
+                  break;
+                case true:
+                  status = OrderItemStatus.picked;
+                  break;
+                case false:
+                  status = OrderItemStatus.canceled;
+                  break;
+              }
+
+              context
+                  .read(activeOrderProvider.notifier)
+                  .updateOrderItemStatus(orderItem, status);
+            },
           ),
         ],
       ),

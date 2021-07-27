@@ -55,6 +55,34 @@ class OrderService {
     }
   }
 
+  Future<void> updateOrderItemStatus(
+    OrderItem orderItem,
+    OrderItemStatus orderItemStatus,
+  ) async {
+    try {
+      late String statusString;
+
+      switch (orderItemStatus) {
+        case OrderItemStatus.waiting:
+          statusString = 'waiting';
+          break;
+        case OrderItemStatus.picked:
+          statusString = 'picked';
+          break;
+        case OrderItemStatus.canceled:
+          statusString = 'canceled';
+          break;
+      }
+
+      await _dio.post(_('active/items/${orderItem.id}/update'), data: {
+        '_method': 'PATCH',
+        'status': statusString,
+      });
+    } on DioError catch (error) {
+      throw CustomException.fromDioError(error);
+    }
+  }
+
   Future<void> deliverOrder() async {
     try {
       await _dio.post(_('active/deliver'));
