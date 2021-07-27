@@ -16,13 +16,16 @@ class Utils {
     String title = 'Perhatian',
     String description = '',
     String cancelText = 'Batal',
-    String confirmText = 'Kembali',
+    String confirmText = 'Ya',
     Function()? onConfirm,
     Function()? onCancel,
   }) async {
     // set up the buttons
     final Widget cancelButton = TextButton(
       child: Text(cancelText),
+      style: TextButton.styleFrom(
+        primary: ColorPallete.textColor,
+      ),
       onPressed: () {
         Navigator.of(context).pop();
 
