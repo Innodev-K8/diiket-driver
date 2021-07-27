@@ -1,4 +1,5 @@
 import 'package:diiket_models/all.dart';
+import 'package:driver/ui/common/helper.dart';
 import 'package:driver/ui/common/styles.dart';
 import 'package:flutter/material.dart';
 
@@ -20,23 +21,23 @@ class OrderPaymentDetail extends StatelessWidget {
       child: Column(
         children: [
           DetailItem(
-            title: 'Berat barang',
-            value: Text('2 kg'),
+            title: 'Harga barang',
+            value: Text('Rp. ${Helper.fmtPrice(order.products_price)}'),
           ),
           SizedBox(height: 16.0),
           DetailItem(
             title: 'Ongkos belanja',
-            value: Text('Rp. 1000'),
+            value: Text('Rp. ${Helper.fmtPrice(order.pickup_fee)}'),
           ),
           SizedBox(height: 16.0),
           DetailItem(
             title: 'Ongkos kirim',
-            value: Text('Rp. 1000'),
+            value: Text('Rp. ${Helper.fmtPrice(order.delivery_fee)}'),
           ),
           SizedBox(height: 16.0),
           DetailItem(
             title: 'Biaya Layanan',
-            value: Text('Rp. 1000'),
+            value: Text('Rp. ${Helper.fmtPrice(order.service_fee)}'),
           ),
           SizedBox(height: 16.0),
           Divider(
@@ -48,7 +49,7 @@ class OrderPaymentDetail extends StatelessWidget {
             children: [
               Text('Total harga', style: kTextTheme.headline5),
               Text(
-                'Rp. 123',
+                'Rp. ${Helper.fmtPrice(order.total_price)}',
                 textAlign: TextAlign.end,
                 style: kTextTheme.headline5!.copyWith(
                   color: ColorPallete.secondaryColor,
