@@ -150,7 +150,9 @@ class DonePurchasingButton extends HookWidget {
             padding:
                 const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
             child: Text('*Pastikan semua  item barang sudah dikonfirmasi.'),
-          ),
+          )
+        else
+          SizedBox(height: 20),
       ],
     );
   }
