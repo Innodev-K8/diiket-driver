@@ -17,6 +17,8 @@ class Utils {
     String description = '',
     String cancelText = 'Batal',
     String confirmText = 'Ya',
+    Color confirmColor = ColorPallete.primaryColor,
+    Color cancelColor = ColorPallete.textColor,
     Function()? onConfirm,
     Function()? onCancel,
   }) async {
@@ -24,7 +26,7 @@ class Utils {
     final Widget cancelButton = TextButton(
       child: Text(cancelText),
       style: TextButton.styleFrom(
-        primary: ColorPallete.textColor,
+        primary: cancelColor,
       ),
       onPressed: () {
         Navigator.of(context).pop();
@@ -37,6 +39,7 @@ class Utils {
       child: Text(confirmText),
       style: ElevatedButton.styleFrom(
         elevation: 0,
+        primary: confirmColor,
       ),
       onPressed: () {
         Navigator.of(context).pop();

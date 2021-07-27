@@ -101,6 +101,7 @@ class CancelOrrderButton extends HookWidget {
       description: 'Apa Anda yakin ingin membatalkan pesanan ini?.',
       cancelText: 'Tidak',
       confirmText: 'Ya',
+      confirmColor: ColorPallete.errorColor,
       onConfirm: onConfirm,
     );
   }
