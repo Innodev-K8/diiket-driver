@@ -19,55 +19,59 @@ class OrderChecklistItem extends StatelessWidget {
     final totalPrice = (orderItem.quantity ?? 0) * (product.price ?? 0);
 
     return Container(
-        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (product.photo_url != null)
-              Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: Image.network(
-                  product.photo_url!,
-                  width: 60,
+      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (product.photo_url != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Image.network(
+                product.photo_url!,
+                width: 60,
+              ),
+            ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  product.name ?? '-',
+                  style: kTextTheme.headline4!.copyWith(fontSize: 16),
                 ),
-              ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    product.name ?? '-',
-                    style: kTextTheme.headline4!.copyWith(fontSize: 16),
-                  ),
-                  SizedBox(height: 4),
-                  Row(
-                    children: [
-                      Text("${orderItem.quantity} ${product.quantity_unit}"),
-                      Container(
-                        width: 4,
-                        height: 4,
-                        margin: const EdgeInsets.symmetric(horizontal: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          shape: BoxShape.circle,
-                        ),
+                SizedBox(height: 4),
+                Row(
+                  children: [
+                    Text("${orderItem.quantity} ${product.quantity_unit}"),
+                    Container(
+                      width: 4,
+                      height: 4,
+                      margin: const EdgeInsets.symmetric(horizontal: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        shape: BoxShape.circle,
                       ),
-                      Text(
-                        "Rp ${Helper.fmtPrice(totalPrice)}",
-                        style: kTextTheme.caption!.copyWith(
-                          color: ColorPallete.secondaryColor,
-                        ),
+                    ),
+                    Text(
+                      "Rp ${Helper.fmtPrice(totalPrice)}",
+                      style: kTextTheme.caption!.copyWith(
+                        color: ColorPallete.secondaryColor,
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-            SizedBox(width: 8),
-            CheckListButton(
-              onToggled: (state) {},
-            ),
-          ],
-        ));
+          ),
+          SizedBox(width: 8),
+          CheckListButton(
+            initialValue: orderItem.status == OrderItemStatus.waiting
+                ? null
+                : orderItem.status == OrderItemStatus.picked,
+            onToggled: (state) {},
+          ),
+        ],
+      ),
+    );
   }
 }

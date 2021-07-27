@@ -4,16 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class CheckListButton extends HookWidget {
+  final bool? initialValue;
   final Function(bool?) onToggled;
 
   const CheckListButton({
     Key? key,
     required this.onToggled,
+    this.initialValue,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final status = useState<bool?>(null);
+    final status = useState<bool?>(initialValue);
 
     return Row(
       children: [
