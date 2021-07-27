@@ -131,22 +131,31 @@ class DonePurchasingButton extends HookWidget {
       });
     }
 
-    return Container(
-      width: double.infinity,
-      height: 45,
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      margin: const EdgeInsets.only(bottom: 24),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          elevation: 0,
-          primary: ColorPallete.primaryColor,
-          onSurface: ColorPallete.darkGray,
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          height: 45,
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              elevation: 0,
+              primary: ColorPallete.primaryColor,
+              onSurface: ColorPallete.darkGray,
+            ),
+            child: isLoading.value
+                ? SmallLoading()
+                : Text('Selesai Membeli Barang'),
+            onPressed: isLoading.value || !isChecked ? null : completePurcashe,
+          ),
         ),
-        child:
-            isLoading.value ? SmallLoading()
-            : Text('Selesai Membeli Barang'),
-        onPressed: isLoading.value || !isChecked ? null : completePurcashe,
-      ),
+        if (!isChecked)
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
+            child: Text('*Pastikan semua  item barang sudah dikonfirmasi.'),
+          ),
+      ],
     );
   }
 
