@@ -29,19 +29,6 @@ class PurcashingOrderPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = useState<bool>(false);
-    final isMounted = useIsMounted();
-
-    void cancelOrder() {
-      _confirmCancelOrder(context, () async {
-        isLoading.value = true;
-
-        await context.read(activeOrderProvider.notifier).cancelOrder();
-
-        if (isMounted()) isLoading.value = false;
-      });
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Pengambilan Pesanan'),
@@ -72,23 +59,44 @@ class PurcashingOrderPage extends HookWidget {
               ),
             ),
             SizedBox(height: 20),
-            Container(
-              width: double.infinity,
-              height: 45,
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  primary: ColorPallete.errorColor,
-                ),
-                child:
-                    isLoading.value ? SmallLoading() : Text('Batalkan Pesanan'),
-                onPressed: isLoading.value ? null : cancelOrder,
-              ),
-            ),
+            CancelOrrderButton(),
             SizedBox(height: 8),
-            DonePurchasingButton(isLoading: isLoading),
+            DonePurchasingButton(),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class CancelOrrderButton extends HookWidget {
+  const CancelOrrderButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final isLoading = useState<bool>(false);
+    final isMounted = useIsMounted();
+
+    void cancelOrder() {
+      _confirmCancelOrder(context, () async {
+        isLoading.value = true;
+
+        await context.read(activeOrderProvider.notifier).cancelOrder();
+
+        if (isMounted()) isLoading.value = false;
+      });
+    }
+
+    return Container(
+      width: double.infinity,
+      height: 45,
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: OutlinedButton(
+        style: OutlinedButton.styleFrom(
+          primary: ColorPallete.errorColor,
+        ),
+        child: isLoading.value ? SmallLoading() : Text('Batalkan Pesanan'),
+        onPressed: isLoading.value ? null : cancelOrder,
       ),
     );
   }
@@ -106,12 +114,7 @@ class PurcashingOrderPage extends HookWidget {
 }
 
 class DonePurchasingButton extends HookWidget {
-  const DonePurchasingButton({
-    Key? key,
-    required this.isLoading,
-  }) : super(key: key);
-
-  final ValueNotifier<bool> isLoading;
+  const DonePurchasingButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
