@@ -47,7 +47,7 @@ class OrderPaymentDetail extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Total harga', style: kTextTheme.headline5),
+              Text('Total tagihan', style: kTextTheme.headline5),
               Text(
                 'Rp. ${Helper.fmtPrice(order.total_price)}',
                 textAlign: TextAlign.end,
