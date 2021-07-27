@@ -61,8 +61,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: b1ed80d
-      resolved-ref: b1ed80d5edfbc508b7ebb55aa25d5f02356ce817
+      ref: f9974ed
+      resolved-ref: f9974ed589aa7b588c9d8dabb4ea2db7ceae1774
       url: "git@github.com:Innodev-K8/diiket-models.git"
     source: git
     version: "0.0.1"
