@@ -12,13 +12,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class StallOrder {
-  final Stall? stall;
-  final List<OrderItem>? items;
-
-  StallOrder({this.stall, this.items});
-}
-
 class PurcashingOrderPage extends HookWidget {
   final Order order;
 
