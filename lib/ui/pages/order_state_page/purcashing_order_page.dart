@@ -1,5 +1,6 @@
 import 'package:diiket_models/all.dart';
 import 'package:driver/data/providers/order/active_order_provider.dart';
+import 'package:driver/ui/common/styles.dart';
 import 'package:driver/ui/common/utils.dart';
 import 'package:driver/ui/widgets/customer_detail.dart';
 import 'package:driver/ui/widgets/order_checklist_item.dart';
@@ -29,6 +30,7 @@ class PurcashingOrderPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final isLoading = useState<bool>(false);
+    final isMounted = useIsMounted();
 
     void completePurcashe() {
       _confirmReadyToDeliver(context, () async {
@@ -37,6 +39,16 @@ class PurcashingOrderPage extends HookWidget {
         await context.read(activeOrderProvider.notifier).deliverOrder();
 
         isLoading.value = false;
+      });
+    }
+
+    void cancelOrder() {
+      _confirmCancelOrder(context, () async {
+        isLoading.value = true;
+
+        await context.read(activeOrderProvider.notifier).cancelOrder();
+
+        if (isMounted()) isLoading.value = false;
       });
     }
 
@@ -74,6 +86,20 @@ class PurcashingOrderPage extends HookWidget {
               width: double.infinity,
               height: 45,
               padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  primary: ColorPallete.errorColor,
+                ),
+                child:
+                    isLoading.value ? SmallLoading() : Text('Batalkan Pesanan'),
+                onPressed: isLoading.value ? null : cancelOrder,
+              ),
+            ),
+            SizedBox(height: 8),
+            Container(
+              width: double.infinity,
+              height: 45,
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               margin: const EdgeInsets.only(bottom: 24),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -100,6 +126,17 @@ class PurcashingOrderPage extends HookWidget {
       title: 'Perhatian',
       description:
           'Pastikan barang pesanan sudah berada di tangan dan siap diantar.',
+      cancelText: 'Tidak',
+      confirmText: 'Ya',
+      onConfirm: onConfirm,
+    );
+  }
+
+  void _confirmCancelOrder(BuildContext context, Future Function() onConfirm) {
+    Utils.prompt(
+      context,
+      title: 'Perhatian',
+      description: 'Apa Anda yakin ingin membatalkan pesanan ini?.',
       cancelText: 'Tidak',
       confirmText: 'Ya',
       onConfirm: onConfirm,
