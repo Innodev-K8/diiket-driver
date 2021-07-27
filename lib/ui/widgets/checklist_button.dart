@@ -17,27 +17,41 @@ class CheckListButton extends HookWidget {
   Widget build(BuildContext context) {
     final status = useState<bool?>(initialValue);
 
-    return Row(
+    return Column(
       children: [
-        SquareIconButton(
-          icon: Icon(Icons.check),
-          isActive: status.value ?? false,
-          onPressed: () {
-            status.value = status.value == true ? null : true;
+        Row(
+          children: [
+            SquareIconButton(
+              icon: Icon(Icons.check),
+              isActive: status.value ?? false,
+              onPressed: () {
+                status.value = status.value == true ? null : true;
 
-            onToggled(status.value);
-          },
+                onToggled(status.value);
+              },
+            ),
+            SizedBox(width: 16),
+            SquareIconButton(
+              icon: Icon(Icons.close),
+              primary: ColorPallete.errorColor,
+              isActive: status.value == false,
+              onPressed: () {
+                status.value = status.value == false ? null : false;
+
+                onToggled(status.value);
+              },
+            ),
+          ],
         ),
-        SizedBox(width: 16),
-        SquareIconButton(
-          icon: Icon(Icons.close),
-          primary: ColorPallete.errorColor,
-          isActive: status.value == false ? true : false,
-          onPressed: () {
-            status.value = status.value == false ? null : false;
-
-            onToggled(status.value);
-          },
+        if (status.value == false)
+          SizedBox(
+            // SquareIconButton width is 34, so 34 * 2 + 16
+            width: 34 * 2 + 16,
+            child: Text(
+              'Harap konfirmasi ke pelanggan',
+              style: kTextTheme.overline,
+              textAlign: TextAlign.end,
+            ),
         ),
       ],
     );
