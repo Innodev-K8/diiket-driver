@@ -1,9 +1,17 @@
 import 'package:diiket_models/all.dart';
+import 'package:driver/data/providers/auth/auth_provider.dart';
+import 'package:driver/data/providers/firebase_provider.dart';
+import 'package:driver/data/providers/order/active_order_provider.dart';
+import 'package:driver/data/providers/order/chat/chat_channel_provider.dart';
 import 'package:driver/ui/common/helper.dart';
 import 'package:driver/ui/common/styles.dart';
 import 'package:driver/ui/common/utils.dart';
+import 'package:driver/ui/pages/chat/chat_page.dart';
+import 'package:driver/ui/widgets/small_loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'detail_item.dart';
 
@@ -93,19 +101,75 @@ class CustomerDetail extends StatelessWidget {
                 ),
                 label: Text("Telp"),
               ),
-              TextButton.icon(
-                style: TextButton.styleFrom(primary: ColorPallete.primaryColor),
-                onPressed: () {},
-                icon: Icon(
-                  Icons.chat_bubble,
-                  size: 18,
-                ),
-                label: Text("Chat"),
-              ),
+              OpenChatButton(),
             ],
           )
         ],
       ),
+    );
+  }
+}
+
+class OpenChatButton extends HookWidget {
+  const OpenChatButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final isLoading = useState<bool>(false);
+    final isMounted = useIsMounted();
+
+    return TextButton.icon(
+      style: TextButton.styleFrom(primary: ColorPallete.primaryColor),
+      onPressed: isLoading.value
+          ? null
+          : () async {
+              if (isMounted()) {
+                isLoading.value = true;
+              }
+
+              final user = context.read(authProvider);
+              final order = context.read(activeOrderProvider);
+
+              final channelId = order?.stream_chat_channel;
+              final userToken = user?.stream_chat_token;
+              final userId = user?.id.toString();
+
+              try {
+                // check if null
+                if (channelId == null || userToken == null || userId == null) {
+                  throw CustomException(
+                    message: 'Tidak dapat menghubungkan ke chat',
+                    reason:
+                        'Channel ID: $channelId Token: $userToken  User ID: $userId',
+                  );
+                }
+
+                await context.read(orderChatChannelProvider.notifier).connect(
+                      channelId: channelId,
+                      userToken: userToken,
+                      userId: userId,
+                    );
+
+                Navigator.of(context).pushNamed(ChatPage.route);
+              } catch (exception, st) {
+                context.read(crashlyticsProvider).recordError(exception, st);
+
+                Utils.alert(context, 'Gagal menghubungkan ke chat');
+
+                return;
+              } finally {
+                if (isMounted()) {
+                  isLoading.value = false;
+                }
+              }
+            },
+      icon: Icon(
+        Icons.chat_bubble,
+        size: 18,
+      ),
+      label: isLoading.value ? SmallLoading() : Text("Chat"),
     );
   }
 }

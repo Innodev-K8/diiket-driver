@@ -180,8 +180,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: e15b94a
-      resolved-ref: e15b94aee62fba894cee384391841f8cad109be5
+      ref: f9974ed
+      resolved-ref: f9974ed589aa7b588c9d8dabb4ea2db7ceae1774
       url: "git@github.com:Innodev-K8/diiket-models.git"
     source: git
     version: "0.0.1"
@@ -407,6 +407,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.2"
+  flutter_phone_direct_caller:
+    dependency: "direct main"
+    description:
+      name: flutter_phone_direct_caller
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -501,6 +508,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.4"
+  grouped_list:
+    dependency: "direct main"
+    description:
+      name: grouped_list
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.1.0"
   hive:
     dependency: transitive
     description:
@@ -627,6 +641,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  maps_launcher:
+    dependency: "direct main"
+    description:
+      name: maps_launcher
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   markdown:
     dependency: transitive
     description:
