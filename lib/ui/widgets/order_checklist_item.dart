@@ -8,10 +8,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class OrderChecklistItem extends StatelessWidget {
   final OrderItem orderItem;
+  final bool readonly;
 
   const OrderChecklistItem({
     Key? key,
     required this.orderItem,
+    this.readonly = false,
   }) : super(key: key);
 
   @override
@@ -66,7 +68,8 @@ class OrderChecklistItem extends StatelessWidget {
             ),
           ),
           SizedBox(width: 8),
-          CheckListButton(
+          if (!readonly)
+            CheckListButton(
             initialValue: orderItem.status == OrderItemStatus.waiting
                 ? null
                 : orderItem.status == OrderItemStatus.picked,

@@ -1,4 +1,5 @@
 import 'package:diiket_models/all.dart';
+import 'package:driver/ui/common/helper.dart';
 import 'package:driver/ui/common/styles.dart';
 import 'package:flutter/material.dart';
 
@@ -43,6 +44,15 @@ class CustomerDetail extends StatelessWidget {
             ),
           ),
           SizedBox(
+            height: 16,
+          ),
+          DetailItem(
+            title: 'Jarak Pengiriman',
+            value: Text(
+              Helper.fmtMetricDistance(order.delivery_distance ?? 0),
+            ),
+          ),
+          SizedBox(
             height: 20,
           ),
           Divider(
@@ -50,20 +60,34 @@ class CustomerDetail extends StatelessWidget {
             thickness: 1,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Hubungi pemesan",
-                style: kTextTheme.headline5,
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: Text(
+                  "Hubungi",
+                  style: kTextTheme.headline5,
+                ),
+              ),
+              Spacer(),
+              TextButton.icon(
+                style: TextButton.styleFrom(primary: ColorPallete.primaryColor),
+                onPressed: () {},
+                icon: Icon(
+                  Icons.phone,
+                  size: 18,
+                ),
+                label: Text("Telp"),
               ),
               TextButton.icon(
                 style: TextButton.styleFrom(primary: ColorPallete.primaryColor),
                 onPressed: () {},
                 icon: Icon(
                   Icons.chat_bubble,
+                  size: 18,
                 ),
                 label: Text("Chat"),
-              )
+              ),
             ],
           )
         ],

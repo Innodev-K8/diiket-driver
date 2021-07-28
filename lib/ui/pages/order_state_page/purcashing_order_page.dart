@@ -3,13 +3,11 @@ import 'package:driver/data/providers/order/active_order_provider.dart';
 import 'package:driver/ui/common/styles.dart';
 import 'package:driver/ui/common/utils.dart';
 import 'package:driver/ui/widgets/customer_detail.dart';
-import 'package:driver/ui/widgets/order_checklist_item.dart';
+import 'package:driver/ui/widgets/order_list.dart';
 import 'package:driver/ui/widgets/order_payment_detail.dart';
-import 'package:driver/ui/widgets/order_stall_header.dart';
 import 'package:driver/ui/widgets/small_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:grouped_list/grouped_list.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class PurcashingOrderPage extends HookWidget {
@@ -38,19 +36,7 @@ class PurcashingOrderPage extends HookWidget {
               child: OrderPaymentDetail(order: order),
             ),
             SizedBox(height: 20),
-            GroupedListView<OrderItem, Stall>(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              elements: order.order_items ?? [],
-              groupBy: (item) => item.product!.stall!,
-              groupComparator: (a, b) => 0,
-              groupSeparatorBuilder: (Stall stall) =>
-                  OrderStallHeader(stall: stall),
-              separator: Divider(),
-              itemBuilder: (context, item) => OrderChecklistItem(
-                orderItem: item,
-              ),
-            ),
+            OrderList(order: order),
             SizedBox(height: 20),
             CancelOrrderButton(),
             SizedBox(height: 8),
