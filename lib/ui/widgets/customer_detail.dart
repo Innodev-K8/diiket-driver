@@ -1,7 +1,9 @@
 import 'package:diiket_models/all.dart';
 import 'package:driver/ui/common/helper.dart';
 import 'package:driver/ui/common/styles.dart';
+import 'package:driver/ui/common/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
 import 'detail_item.dart';
 
@@ -22,7 +24,7 @@ class CustomerDetail extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Detail Penerima",
+            "Detail Pelanggan",
             style: kTextTheme.headline3,
           ),
           SizedBox(
@@ -72,7 +74,19 @@ class CustomerDetail extends StatelessWidget {
               Spacer(),
               TextButton.icon(
                 style: TextButton.styleFrom(primary: ColorPallete.primaryColor),
-                onPressed: () {},
+                onPressed: () {
+                  final phoneNumber = order.user?.phone_number;
+
+                  if (phoneNumber == null) {
+                    Utils.alert(context, 'Tidak  dapat menghubungi penjual');
+                    return;
+                  }
+
+                  Utils.prompt(context, description: 'Telepon pelanggan?',
+                      onConfirm: () async {
+                    await FlutterPhoneDirectCaller.callNumber(phoneNumber);
+                  });
+                },
                 icon: Icon(
                   Icons.phone,
                   size: 18,
