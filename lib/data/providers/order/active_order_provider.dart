@@ -135,7 +135,6 @@ class ActiveOrderNotifier extends StateNotifier<Order?> {
   Future<void> completeOrder() async {
     try {
       await _read(orderServiceProvider).completeOrder();
-
       await _read(orderChatChannelProvider.notifier).disconnect();
 
       // we know if this code is excecuted, completeOrder was successfuly executed

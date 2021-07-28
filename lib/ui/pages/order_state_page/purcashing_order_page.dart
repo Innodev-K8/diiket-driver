@@ -158,4 +158,15 @@ class DonePurchasingButton extends HookWidget {
       onConfirm: onConfirm,
     );
   }
+
+  void _confirmCancel(BuildContext context, Future Function() onConfirm) {
+    Utils.prompt(
+      context,
+      title: 'Perhatian',
+      description: 'Apa Anda yakin ingin membatalkan pesanan ini?.',
+      cancelText: 'Tidak',
+      confirmText: 'Ya',
+      onConfirm: onConfirm,
+    );
+  }
 }
