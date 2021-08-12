@@ -34,6 +34,27 @@ class AuthState extends StateNotifier<User?> {
     this.refreshProfile();
   }
 
+   Future<void> signInWithPhoneCredential(
+      firebase_auth.PhoneAuthCredential credential) async {
+    try {
+      if (_firebaseAuthRepository.getCurrentFirebaseUser() != null) {
+        await signOut();
+      }
+
+      // try to login using firebase
+      await _firebaseAuthRepository.signInWithPhoneCredential(credential);
+
+      // login to laravel using the firebase user
+      final loggedUser = _firebaseAuthRepository.getCurrentFirebaseUser();
+
+      if (loggedUser != null) {
+        return await _signInWithFirebaseUser(loggedUser);
+      }
+    } on CustomException catch (error) {
+      _read(authExceptionProvider).state = error;
+    }
+  }
+
   // Komunikasi ke laravel
   Future<void> updateUserName(String name) async {
     try {
@@ -56,27 +77,6 @@ class AuthState extends StateNotifier<User?> {
       _read(authExceptionProvider).state = error;
     } finally {
       _read(authLoadingProvider).state = false;
-    }
-  }
-
-  Future<void> signInWithPhoneCredential(
-      firebase_auth.PhoneAuthCredential credential) async {
-    try {
-      if (_firebaseAuthRepository.getCurrentFirebaseUser() != null) {
-        await signOut();
-      }
-
-      // try to login using firebase
-      await _firebaseAuthRepository.signInWithPhoneCredential(credential);
-
-      // login to laravel using the firebase user
-      final loggedUser = _firebaseAuthRepository.getCurrentFirebaseUser();
-
-      if (loggedUser != null) {
-        return await _signInWithFirebaseUser(loggedUser);
-      }
-    } on CustomException catch (error) {
-      _read(authExceptionProvider).state = error;
     }
   }
 
