@@ -57,7 +57,7 @@ class ChannelPage extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 8.0),
                 child: Icon(
                   Icons.send_rounded,
-                  color: ColorPallete.secondaryColor,
+                  color: ColorPallete.primaryColor,
                 ),
               ),
             ),

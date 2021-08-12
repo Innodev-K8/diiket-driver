@@ -200,7 +200,6 @@ class _LoginPageState extends State<LoginPage> {
             width: 120,
             height: 48,
             child: PrimaryButton(
-              color: ColorPallete.secondaryColor,
               disabled: phoneNumberField.text.isEmpty,
               onPressed: () {
                 FocusScope.of(context).unfocus();
@@ -303,7 +302,6 @@ class _LoginPageState extends State<LoginPage> {
             height: 48,
             child: PrimaryButton(
               disabled: otpCodeField.text.length != 6,
-              color: ColorPallete.secondaryColor,
               onPressed: () {
                 FocusScope.of(context).unfocus();
 
