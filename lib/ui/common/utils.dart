@@ -17,7 +17,7 @@ class Utils {
     String description = '',
     String cancelText = 'Batal',
     String confirmText = 'Ya',
-    Color confirmColor = ColorPallete.primaryColor,
+    Color confirmColor = ColorPallete.secondaryColor,
     Color cancelColor = ColorPallete.textColor,
     Function()? onConfirm,
     Function()? onCancel,

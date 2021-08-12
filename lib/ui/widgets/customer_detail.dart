@@ -81,7 +81,8 @@ class CustomerDetail extends StatelessWidget {
               ),
               Spacer(),
               TextButton.icon(
-                style: TextButton.styleFrom(primary: ColorPallete.primaryColor),
+                style:
+                    TextButton.styleFrom(primary: ColorPallete.secondaryColor),
                 onPressed: () {
                   final phoneNumber = order.user?.phone_number;
 
@@ -121,7 +122,7 @@ class OpenChatButton extends HookWidget {
     final isMounted = useIsMounted();
 
     return TextButton.icon(
-      style: TextButton.styleFrom(primary: ColorPallete.primaryColor),
+      style: TextButton.styleFrom(primary: ColorPallete.secondaryColor),
       onPressed: isLoading.value
           ? null
           : () async {

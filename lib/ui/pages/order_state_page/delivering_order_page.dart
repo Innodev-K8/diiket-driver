@@ -75,7 +75,7 @@ class DeliveringOrderPage extends HookWidget {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: OutlinedButton(
                 style: OutlinedButton.styleFrom(
-                  primary: ColorPallete.primaryColor,
+                  primary: ColorPallete.secondaryColor,
                 ),
                 child: isLoadingCompleting.value
                     ? SmallLoading()

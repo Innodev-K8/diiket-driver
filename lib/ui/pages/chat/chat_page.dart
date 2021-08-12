@@ -44,7 +44,11 @@ class ChannelPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const ChannelHeader(),
+      appBar: const ChannelHeader(
+        // ovveride back button to not show unread chats
+        leading: StreamBackButton(),
+        subtitle: SizedBox(),
+      ),
       body: Column(
         children: const <Widget>[
           Expanded(
@@ -57,7 +61,7 @@ class ChannelPage extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 8.0),
                 child: Icon(
                   Icons.send_rounded,
-                  color: ColorPallete.primaryColor,
+                  color: ColorPallete.secondaryColor,
                 ),
               ),
             ),

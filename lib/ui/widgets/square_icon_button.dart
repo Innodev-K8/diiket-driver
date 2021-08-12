@@ -12,7 +12,7 @@ class SquareIconButton extends HookWidget {
     Key? key,
     required this.icon,
     required this.onPressed,
-    this.primary = ColorPallete.primaryColor,
+    this.primary = ColorPallete.secondaryColor,
     this.isActive = false,
   }) : super(key: key);
 

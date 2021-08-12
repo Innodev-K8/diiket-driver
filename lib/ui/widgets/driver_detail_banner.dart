@@ -43,7 +43,7 @@ class DriverDetailBanner extends StatelessWidget {
                 Text(
                   driver.name ?? '-',
                   style: kTextTheme.bodyText2!.copyWith(
-                    color: backgroundColor ?? ColorPallete.primaryColor,
+                    color: backgroundColor ?? ColorPallete.secondaryColor,
                   ),
                 ),
               ],

@@ -123,7 +123,7 @@ class DonePurchasingButton extends HookWidget {
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               elevation: 0,
-              primary: ColorPallete.primaryColor,
+              primary: ColorPallete.secondaryColor,
               onSurface: ColorPallete.darkGray,
             ),
             child: isLoading.value

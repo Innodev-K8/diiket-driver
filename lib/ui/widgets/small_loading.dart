@@ -13,7 +13,7 @@ class SmallLoading extends StatelessWidget {
       height: 16,
       child: CircularProgressIndicator(
         strokeWidth: 3,
-        color: ColorPallete.primaryColor,
+        color: ColorPallete.secondaryColor,
       ),
     );
   }

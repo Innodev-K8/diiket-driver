@@ -89,14 +89,14 @@ class OrderStallHeader extends StatelessWidget {
           children: [
             Icon(
               Icons.phone,
-              color: ColorPallete.primaryColor,
+              color: ColorPallete.secondaryColor,
               size: 18,
             ),
             SizedBox(width: 6),
             Text(
               "Telp",
               style: kTextTheme.button!.copyWith(
-                color: ColorPallete.primaryColor,
+                color: ColorPallete.secondaryColor,
               ),
             ),
           ],

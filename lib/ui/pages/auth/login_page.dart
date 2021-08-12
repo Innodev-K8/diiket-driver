@@ -111,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                     if (isLoading)
                       Center(
                         child: CircularProgressIndicator(
-                          color: ColorPallete.primaryColor,
+                          color: ColorPallete.secondaryColor,
                         ),
                       ),
                   ],
@@ -279,7 +279,7 @@ class _LoginPageState extends State<LoginPage> {
                     inactiveFillColor: ColorPallete.backgroundColor,
                     activeColor: ColorPallete.successColor,
                     activeFillColor: ColorPallete.backgroundColor,
-                    selectedColor: ColorPallete.primaryColor,
+                    selectedColor: ColorPallete.secondaryColor,
                     selectedFillColor: ColorPallete.backgroundColor,
                   ),
                   animationDuration: Duration(milliseconds: 300),
@@ -333,7 +333,7 @@ class _LoginPageState extends State<LoginPage> {
                       );
                     },
                     style: TextButton.styleFrom(
-                      primary: ColorPallete.primaryColor,
+                      primary: ColorPallete.secondaryColor,
                     ),
                     child: Text('Kirim ulang kode verifikasi'),
                   )

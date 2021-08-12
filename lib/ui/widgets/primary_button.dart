@@ -16,7 +16,7 @@ class PrimaryButton extends HookWidget {
     required this.child,
     this.trailing,
     this.onPressed,
-    this.color = ColorPallete.primaryColor,
+    this.color = ColorPallete.secondaryColor,
     this.disabled = false,
   }) : super(key: key);
 
