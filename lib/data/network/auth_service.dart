@@ -44,14 +44,18 @@ class AuthService {
     }
   }
 
-  Future<AuthResponse> loginWithFirebaseToken(String token) async {
+  Future<AuthResponse> loginWithFirebaseToken(String token,
+      [String? fcmToken]) async {
     try {
+      print('login with fcmtoken: $fcmToken');
+      
       final response = await _dio.post(
         _('login/firebase'),
         data: {
           'firebase_token': token,
           'device_name': 'mobile',
           'signin_only': true,
+          if (fcmToken != null) 'fcm_token': fcmToken,
         },
       );
 

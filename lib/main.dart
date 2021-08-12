@@ -1,4 +1,8 @@
 import 'package:driver/data/notification/background_fcm.dart';
+import 'package:driver/data/notification/channels.dart';
+import 'package:driver/data/notification/service.dart';
+import 'package:driver/data/providers/auth/auth_provider.dart';
+import 'package:driver/data/providers/firebase_provider.dart';
 import 'package:driver/data/providers/order/chat/chat_client_provider.dart';
 import 'package:driver/ui/common/styles.dart';
 import 'package:driver/ui/common/theme.dart';
@@ -11,6 +15,7 @@ import 'package:driver/ui/widgets/auth_wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -18,6 +23,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
+  await NotificationService().initialize();
 
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
@@ -36,6 +42,25 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final firebaseMessaging = context.read(messagingProvider);
+
+    // when the token change, update the user device token and add the token to getstream
+    firebaseMessaging.onTokenRefresh.listen((token) {
+      final client = context.read(chatClientProvider);
+      final auth = context.read(authProvider.notifier);
+
+      client.addDevice(token, PushProvider.firebase);
+
+      if (context.read(authProvider) != null) {
+        auth.updateDeviceToken(token);
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Driver Diiket',
@@ -44,6 +69,7 @@ class _MyAppState extends State<MyApp> {
       initialRoute: HomePage.route,
       builder: (context, child) => StreamChat(
         client: context.read(chatClientProvider),
+        onBackgroundEventReceived: _streamChatBackgroundEventHandler,
         streamChatThemeData: StreamChatThemeData.fromTheme(
           ThemeData(
             primaryColor: ColorPallete.primaryColor,
@@ -72,5 +98,30 @@ class _MyAppState extends State<MyApp> {
             ),
       },
     );
+  }
+
+  Future<void> _streamChatBackgroundEventHandler(Event event) async {
+    final client = context.read(chatClientProvider);
+
+    final currentUserId = client.state.user?.id;
+
+    if (![
+          EventType.messageNew,
+          EventType.notificationMessageNew,
+        ].contains(event.type) ||
+        event.user?.id == currentUserId) {
+      return;
+    }
+
+    if (event.message == null) return;
+
+    await NotificationService().instance.show(
+          event.message!.id.hashCode,
+          event.message!.user?.name,
+          event.message!.text,
+          NotificationDetails(
+            android: NotificationChannels.chat,
+          ),
+        );
   }
 }

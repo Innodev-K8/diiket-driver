@@ -68,6 +68,18 @@ class AuthState extends StateNotifier<User?> {
     }
   }
 
+  Future<void> updateDeviceToken(String token) async {
+    try {
+      await _authService.updateProfile({
+        'fcm_token': token,
+      });
+
+      await refreshProfile();
+    } on CustomException catch (error) {
+      _read(authExceptionProvider).state = error;
+    }
+  }
+
   Future<void> refreshProfile() async {
     try {
       state = await _authService.me();
@@ -83,9 +95,10 @@ class AuthState extends StateNotifier<User?> {
   Future<void> _signInWithFirebaseUser(firebase_auth.User user) async {
     try {
       final String firebaseToken = await user.getIdToken();
+      final String? fcmToken = await _read(messagingProvider).getToken();
 
       final AuthResponse response =
-          await _authService.loginWithFirebaseToken(firebaseToken);
+          await _authService.loginWithFirebaseToken(firebaseToken, fcmToken);
 
       if (response.token != null && response.user != null) {
         await _read(tokenProvider.notifier).setToken(response.token!);
@@ -113,7 +126,6 @@ class AuthState extends StateNotifier<User?> {
       await _authService.logout().onError((error, stackTrace) => null);
       await _read(tokenProvider.notifier).clearToken();
       await unSubscribeToMarketDriverNotificationTopic(state);
-
 
       state = null;
 
