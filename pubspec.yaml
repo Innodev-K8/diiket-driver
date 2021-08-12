@@ -21,21 +21,19 @@ environment:
   sdk: ">=2.13.0 <3.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
+  cupertino_icons: ^1.0.2
   diiket_models:
     git:
       url: git@github.com:Innodev-K8/diiket-models.git
       ref: f9974ed
-  pusher_client:
-    git: git@github.com:Innodev-K8/pusher_client.git
-  cupertino_icons: ^1.0.2
   firebase_analytics: ^8.2.0
-  firebase_auth: ^1.4.1
+  firebase_auth: ^3.0.1
   firebase_core: ^1.3.0
   firebase_crashlytics: ^2.0.6
   firebase_messaging: ^10.0.2
   firebase_remote_config: ^0.10.0+2
+  flutter:
+    sdk: flutter
   flutter_hooks: ^0.17.0
   flutter_phone_direct_caller: ^2.0.0
   google_fonts: ^2.1.0
@@ -45,6 +43,9 @@ dependencies:
   intl: ^0.17.0
   logger: ^1.0.0
   maps_launcher: ^2.0.0
+  pin_code_fields: ^7.3.0
+  pusher_client:
+    git: git@github.com:Innodev-K8/pusher_client.git
   shared_preferences: ^2.0.6
   stream_chat_flutter: ^2.0.0
 

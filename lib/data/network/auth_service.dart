@@ -17,11 +17,9 @@ class AuthService {
 
   Future<AuthResponse> loginWithEmailPassword(
     String email,
-    String password,
-    [
+    String password, [
     String? fcmToken,
-  ]
-  ) async {
+  ]) async {
     try {
       final response = await _dio.post(
         _('login'),
@@ -53,17 +51,28 @@ class AuthService {
         data: {
           'firebase_token': token,
           'device_name': 'mobile',
+          'signin_only': true,
         },
       );
 
       final authResponse = AuthResponse.fromJson(response.data);
 
       if (authResponse.user?.type != UserType.driver) {
-        throw CustomException(code: 403, message: 'Kredensial salah');
+        throw CustomException(
+          code: 403,
+          message: 'Nomor tidak terdaftar sebagai driver.',
+        );
       }
 
       return authResponse;
     } on DioError catch (error) {
+      if (error.response?.statusCode == 401) {
+        throw CustomException(
+          code: 401,
+          message: 'Nomor tidak terdaftar.',
+        );
+      }
+
       throw CustomException.fromDioError(error);
     }
   }

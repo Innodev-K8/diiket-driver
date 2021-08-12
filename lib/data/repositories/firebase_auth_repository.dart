@@ -1,3 +1,4 @@
+import 'package:driver/ui/common/helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:driver/data/providers/firebase_provider.dart';
@@ -36,7 +37,11 @@ class FirebaseAuthRepository extends BaseFirebaseAuthRepository {
     try {
       await _auth.signInWithCredential(credential);
     } on FirebaseAuthException catch (error) {
-      throw models.CustomException(message: error.message);
+      throw models.CustomException(
+        message: Helper.getFirebaseAuthExceptionMessage('auth/${error.code}'),
+        stackTrace: error.stackTrace,
+        reason: 'auth/${error.code}',
+      );
     }
   }
 
