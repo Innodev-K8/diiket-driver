@@ -1,8 +1,8 @@
 import 'package:diiket_models/all.dart';
+import 'package:driver/common/helpers/casting_helper.dart';
 import 'package:driver/data/network/order_service.dart';
 import 'package:driver/data/providers/order/available_orders_provider.dart';
 import 'package:driver/data/providers/order/chat/chat_channel_provider.dart';
-import 'package:driver/helpers/casting_helper.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final activeOrderErrorProvider = StateProvider<CustomException?>((ref) {

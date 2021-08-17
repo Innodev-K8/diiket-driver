@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:diiket_models/all.dart';
+import 'package:driver/common/helpers/validation_helper.dart';
 import 'package:driver/data/providers/auth/auth_provider.dart';
 import 'package:driver/data/providers/firebase_provider.dart';
-import 'package:driver/helpers/validation_helper.dart';
 import 'package:driver/ui/common/styles.dart';
 import 'package:driver/ui/common/utils.dart';
 import 'package:driver/ui/widgets/primary_button.dart';

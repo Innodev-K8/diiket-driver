@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:diiket_models/all.dart';
+import 'package:driver/common/audio_player_service.dart';
 import 'package:driver/data/network/order_service.dart';
 import 'package:driver/data/providers/auth/auth_provider.dart';
 import 'package:driver/data/providers/pusher_provider.dart';
-import 'package:driver/helpers/casting_helper.dart';
+import 'package:driver/common/helpers/casting_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pusher_client/pusher_client.dart';
@@ -113,6 +114,9 @@ class AvailableOrdersNotifier extends StateNotifier<AsyncValue<List<Order>>> {
       castOrFallback(response['order'], {}),
     );
 
+    // play notification sound
+    AudioPlayerService.playNewOrderNotification();
+    
     addOrderToList(order);
   }
 
